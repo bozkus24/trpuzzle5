@@ -13,6 +13,21 @@ const KB_ROWS = [
 
 const ROWS = 6, COLS = 5;
 
+/* SVG ikonlar (emoji yerine) */
+const _S = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const _F = p => `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none">${p}</svg>`;
+const SVG = {
+  play:    _F('<path d="M8 5.5v13l10-6.5z"/>'),
+  check:   _S('<path d="M20 6.5L9.2 17.3 4 12.1"/>'),
+  cross:   _S('<path d="M18 6L6 18M6 6l12 12"/>'),
+  trophy:  _S('<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.5v1a3 3 0 0 0 3 3"/><path d="M17 6h2.5v1a3 3 0 0 1-3 3"/><path d="M12 14v3.5"/><path d="M8.5 21h7"/><path d="M9.7 17.5h4.6l.6 3.5H9.1z" fill="currentColor" stroke="none"/>'),
+  star:    _S('<path d="M12 3.2l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.8-5.2 2.8 1-5.8L3.4 9.3l5.8-.8z"/>'),
+  thumb:   _S('<path d="M7 10.5V20H4V10.5z"/><path d="M7 10.5l3.6-6.8A1.8 1.8 0 0 1 14 4.6V9h4.4a2 2 0 0 1 2 2.4l-1.2 6A2 2 0 0 1 17.2 19H7z"/>'),
+  neutral: _S('<circle cx="12" cy="12" r="9"/><path d="M8.5 15h7"/><circle cx="9" cy="10.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.2" r="0.9" fill="currentColor" stroke="none"/>'),
+  sad:     _S('<circle cx="12" cy="12" r="9"/><path d="M8.4 16a4 4 0 0 1 7.2 0"/><circle cx="9" cy="10.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.2" r="0.9" fill="currentColor" stroke="none"/>'),
+  backspace: _S('<path d="M21 5H8.4a2 2 0 0 0-1.5.7L2.6 11a1.4 1.4 0 0 0 0 1.9l4.3 5.3a2 2 0 0 0 1.5.8H21a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M12 9.5l5 5M17 9.5l-5 5"/>')
+};
+
 /* Oyunun başlangıç günü — 1. bulmaca bu gün. */
 const EPOCH = new Date(2026, 0, 1);           // 1 Ocak 2026
 const ARCHIVE_DAYS = 92;                       // ~3 ay
@@ -117,7 +132,8 @@ function buildKeyboard(){
     row.forEach(k=>{
       const btn=document.createElement("button");
       btn.className="key"+(k==="ENTER"||k==="SIL"?" wide":"");
-      btn.textContent = k==="SIL" ? "⌫" : (k==="ENTER"?"GİR":k);
+      if(k==="SIL"){ btn.innerHTML=SVG.backspace; }
+      else { btn.textContent = k==="ENTER" ? "GİR" : k; }
       btn.dataset.key=k;
       btn.addEventListener("click",()=>handleKey(k));
       kr.appendChild(btn);
@@ -194,12 +210,11 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-async function submitGuess(){
+function submitGuess(){
   if(current.input.length<COLS){ shake(); msg("Yeterli harf yok"); return; }
   const guess=current.input;
   const lower=guess.toLocaleLowerCase("tr-TR");
-  const ok = ACCEPTED.has(lower) || await tdkCheck(lower);
-  if(!ok){ shake(); msg("Kelime listede yok"); return; }
+  if(!ACCEPTED.has(lower)){ shake(); msg("Kelime listede yok"); return; }
 
   const r=current.row;
   const res=scoreGuess(guess,current.word);
@@ -232,28 +247,15 @@ async function submitGuess(){
   }
 }
 
-/* canlı TDK doğrulaması (çevrimiçiyken; engellenirse sessizce atlar) */
-async function tdkCheck(word){
-  try{
-    const ctrl=new AbortController();
-    const t=setTimeout(()=>ctrl.abort(),3500);
-    const r=await fetch("https://sozluk.gov.tr/gts?ara="+encodeURIComponent(word),{signal:ctrl.signal});
-    clearTimeout(t);
-    if(!r.ok) return false;
-    const data=await r.json();
-    return Array.isArray(data) && data.length>0 && data[0].madde;
-  }catch(e){ return false; }
-}
-
 /* ---------- geri bildirim ---------- */
 function feedback(win, tries){
-  if(!win) return {emoji:"😔", title:"maalesef başaramadın", text:`Kelime: ${current.word}`};
-  let title, emoji;
-  if(tries===1){ title="İnanılmaz"; emoji="🤯"; }
-  else if(tries<=3){ title="Çok iyi"; emoji="🎉"; }
-  else if(tries===4){ title="Fena değil"; emoji="👍"; }
-  else { title="ehh"; emoji="😅"; }
-  return {emoji, title, text:`Kelimeyi ${tries}/6 denemede buldun.`};
+  if(!win) return {icon:SVG.sad, cls:"bad", title:"maalesef başaramadın", text:`Kelime: ${current.word}`};
+  let title, icon;
+  if(tries===1){ title="İnanılmaz"; icon=SVG.trophy; }
+  else if(tries<=3){ title="Çok iyi"; icon=SVG.star; }
+  else if(tries===4){ title="Fena değil"; icon=SVG.thumb; }
+  else { title="ehh"; icon=SVG.neutral; }
+  return {icon, cls:"good", title, text:`Kelimeyi ${tries}/6 denemede buldun.`};
 }
 
 /* ---------- istatistik ---------- */
@@ -295,7 +297,8 @@ function renderStats(){
 /* ---------- küçük ön-popup ---------- */
 function showMini(){
   const fb=feedback(current.win, current.guesses.length);
-  document.getElementById("mini-emoji").textContent=fb.emoji;
+  const ic=document.getElementById("mini-emoji");
+  ic.innerHTML=fb.icon; ic.className="m-emoji "+fb.cls;
   document.getElementById("mini-text").textContent=fb.title;
   document.getElementById("mini").classList.remove("hidden");
 }
@@ -304,7 +307,8 @@ function hideMini(){ document.getElementById("mini").classList.add("hidden"); }
 /* ---------- popup + paylaş ---------- */
 function openModal(justFinished){
   const fb=feedback(current.win, current.guesses.length);
-  document.getElementById("modal-emoji").textContent=fb.emoji;
+  const me=document.getElementById("modal-emoji");
+  me.innerHTML=fb.icon; me.className="modal-emoji "+fb.cls;
   document.getElementById("modal-title").textContent=fb.title;
   document.getElementById("modal-text").textContent=fb.text;
   renderStats();
@@ -368,17 +372,20 @@ function buildArchive(){
     const isToday=i===0;
     const item=document.createElement("div");
     item.className="archive-item"+(isToday?" today":"");
-    let status="▶️", pegs="";
+    let statusHTML;
     if(st && st.done){
-      if(st.win){ status=""; pegs=`<span class="pegs">🟩 ${st.guesses.length}/6</span>`; }
-      else { status=""; pegs=`<span class="pegs">❌ X/6</span>`; }
+      statusHTML = st.win
+        ? `<span class="pegs win">${SVG.check}${st.guesses.length}/6</span>`
+        : `<span class="pegs lose">${SVG.cross}X/6</span>`;
+    } else {
+      statusHTML = `<span class="pegs play">${SVG.play}</span>`;
     }
     item.innerHTML=`
       <div>
         <div class="a-date">${formatTR(d)}${isToday?'<span class="badge-today">BUGÜN</span>':''}</div>
         <div class="a-num">Bulmaca #${puzzleNo(d)+1}</div>
       </div>
-      <div class="a-status">${pegs||status}</div>`;
+      <div class="a-status">${statusHTML}</div>`;
     item.addEventListener("click",()=>startGame(d));
     list.appendChild(item);
   }

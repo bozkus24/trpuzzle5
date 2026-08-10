@@ -12,8 +12,9 @@ derlenmiştir.
 - 📊 **İstatistik ekranı** — oynanan, galibiyet %, seri galibiyet, seri rekoru ve tahmin dağılımı grafiği.
 - 📤 **Paylaş** — mobilde native paylaşım (WhatsApp vb. direkt açılır); sonucu 🟩🟨⬛ emojili görsel olarak paylaşır/kopyalar.
 - Türkçe klavye ve doğru büyük/küçük harf (i/İ, ı/I) desteği.
-- Kelime havuzu tamamen `kelimehavuzu.txt` dosyasından üretilir (5585 kelime); hem günlük gizli kelime hem kabul edilen tahminler bu listeden gelir.
-- Çevrimiçiyken listede olmayan geçerli tahminler için canlı **TDK** doğrulaması (engellenirse gömülü listeye düşer).
+- Kelime havuzu tamamen `kelimehavuzu.txt` dosyasından üretilir (5585 kelime); hem günlük gizli kelime hem kabul edilen tahminler yalnızca bu listeden gelir.
+- Tamamen çevrimdışı çalışır; tahminler yalnızca yerel listeye göre doğrulanır (harici servis/istek yok).
+- Arayüzde emoji yoktur; tüm ikonlar SVG'dir. (Yalnızca paylaşım metni, tanınırlık için klasik 🟩🟨⬛ karelerini içerir.)
 
 ## Çalıştırma
 Kurulum gerektirmez. `index.html` dosyasını tarayıcıda aç — ya da:
