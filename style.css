@@ -152,11 +152,6 @@ body{
 .modal-emoji{font-size:52px; line-height:1}
 .modal h2{margin:8px 0 4px; font-size:24px}
 .modal-text{color:#dcdcdc; margin-bottom:14px}
-.share-preview{
-  background:#0e0e0e; border:1px solid var(--border); border-radius:10px;
-  padding:12px; font-size:20px; line-height:1.5; margin-bottom:14px;
-  white-space:pre; overflow-x:auto; font-family:inherit;
-}
 .copied-toast{
   margin-top:10px; color:var(--correct); font-weight:700; font-size:14px;
 }

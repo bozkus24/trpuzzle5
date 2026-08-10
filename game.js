@@ -308,7 +308,6 @@ function openModal(justFinished){
   document.getElementById("modal-title").textContent=fb.title;
   document.getElementById("modal-text").textContent=fb.text;
   renderStats();
-  document.getElementById("share-preview").textContent=buildShareText();
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
 }
