@@ -12,7 +12,8 @@ derlenmiştir.
 - 📊 **İstatistik ekranı** — oynanan, galibiyet %, seri galibiyet, seri rekoru ve tahmin dağılımı grafiği.
 - 📤 **Paylaş** — mobilde native paylaşım (WhatsApp vb. direkt açılır); sonucu 🟩🟨⬛ emojili görsel olarak paylaşır/kopyalar.
 - Türkçe klavye ve doğru büyük/küçük harf (i/İ, ı/I) desteği.
-- ~2250 kabul edilen kelime; çevrimiçiyken bilinmeyen tahminler için canlı **TDK** doğrulaması (engellenirse gömülü listeye düşer).
+- Kelime havuzu tamamen `kelimehavuzu.txt` dosyasından üretilir (5585 kelime); hem günlük gizli kelime hem kabul edilen tahminler bu listeden gelir.
+- Çevrimiçiyken listede olmayan geçerli tahminler için canlı **TDK** doğrulaması (engellenirse gömülü listeye düşer).
 
 ## Çalıştırma
 Kurulum gerektirmez. `index.html` dosyasını tarayıcıda aç — ya da:
@@ -26,4 +27,4 @@ python3 -m http.server 8000
 - `index.html` — ekranlar (ana menü, nasıl oynanır, arşiv, oyun, paylaş popup'ı)
 - `style.css` — koyu tema arayüz
 - `game.js` — oyun mantığı, günlük kelime seçimi, arşiv, paylaşım
-- `words.js` — TDK'dan derlenmiş 5 harfli kelime listeleri (gizli havuz + kabul listesi)
+- `words.js` — `kelimehavuzu.txt`'ten üretilen kelime listeleri
