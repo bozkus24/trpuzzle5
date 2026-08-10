@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#121213">
-<title>TDK Wordle — Türkçe Kelime Oyunu</title>
+<title>Harfle — Türkçe Kelime Oyunu</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23538d4e'/><text y='74' x='50' font-size='68' text-anchor='middle' font-family='Arial' font-weight='bold' fill='white'>T</text></svg>">
 <link rel="stylesheet" href="style.css">
 
@@ -10,7 +10,7 @@
   <!-- ANA EKRAN -->
   <section id="home" class="screen">
     <div class="home-inner">
-      <h1 class="logo">TDK<span>Wordle</span></h1>
+      <h1 class="logo">Harfle</h1>
       <p class="tagline">Her gün yeni bir Türkçe kelime. 6 hakkın var.</p>
       <div class="home-buttons">
         <button class="menu-btn primary" data-go="game">🎯 Günlük Oyun</button>
@@ -87,13 +87,31 @@
     <div id="keyboard" class="keyboard"></div>
   </section>
 
-  <!-- PAYLAŞ / SONUÇ POPUP -->
+  <!-- KÜÇÜK ÖN-POPUP -->
+  <div id="mini" class="mini hidden">
+    <span class="m-emoji" id="mini-emoji"></span>
+    <span class="m-text" id="mini-text"></span>
+  </div>
+
+  <!-- SONUÇ / İSTATİSTİK POPUP -->
   <div id="overlay" class="overlay hidden">
     <div class="modal">
       <button class="modal-close" id="modal-close">✕</button>
       <div id="modal-emoji" class="modal-emoji">🎉</div>
       <h2 id="modal-title">Tebrikler!</h2>
       <p id="modal-text" class="modal-text"></p>
+
+      <div class="stats-title">İSTATİSTİK</div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num" id="st-played">0</div><div class="stat-lbl">Oynanan</div></div>
+        <div class="stat"><div class="stat-num" id="st-win">0</div><div class="stat-lbl">Galibiyet %</div></div>
+        <div class="stat"><div class="stat-num" id="st-streak">0</div><div class="stat-lbl">Seri Galibiyet</div></div>
+        <div class="stat"><div class="stat-num" id="st-max">0</div><div class="stat-lbl">Seri Rekoru</div></div>
+      </div>
+
+      <div class="stats-title">TAHMİN DAĞILIMI</div>
+      <div class="dist" id="dist"></div>
+
       <pre id="share-preview" class="share-preview"></pre>
       <button class="menu-btn primary wide" id="share-btn">📤 Paylaş</button>
       <button class="menu-btn wide" id="modal-archive" data-go="archive">🗄️ Arşive Git</button>

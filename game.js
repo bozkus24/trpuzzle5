@@ -221,9 +221,14 @@ async function submitGuess(){
   store.set(current.key, {word:current.word, guesses:current.guesses, done:current.done, win:current.win});
 
   if(over){
-    const delay = COLS*160 + 400 + (win?600:0);
+    updateStats(win, current.guesses.length);
+    const delay = COLS*160 + 500 + (win?600:0);
     if(win){ setTimeout(()=>document.querySelector(`.row[data-r="${r}"]`).classList.add("win"), COLS*160+300); }
-    setTimeout(()=>openModal(true), delay+300);
+    // önce küçük popup, sonra sonuç/istatistik ekranı
+    setTimeout(()=>{
+      showMini();
+      setTimeout(()=>{ hideMini(); openModal(true); }, 1500);
+    }, delay);
   }
 }
 
@@ -241,14 +246,60 @@ async function tdkCheck(word){
 }
 
 /* ---------- geri bildirim ---------- */
-const WIN_MSG = {
-  1:["Efsane!","🏆"],2:["Muhteşem!","🌟"],3:["Harika!","🎉"],
-  4:["Güzel iş!","👏"],5:["İyi!","🙂"],6:["Ucuz kurtuldun!","😅"]
-};
 function feedback(win, tries){
-  if(win){ const [t,e]=WIN_MSG[tries]; return {emoji:e, title:t, text:`Kelimeyi ${tries}/6 denemede buldun.`}; }
-  return {emoji:"😔", title:"Olmadı", text:`Bugünkü kelime: ${current.word}`};
+  if(!win) return {emoji:"😔", title:"maalesef başaramadın", text:`Kelime: ${current.word}`};
+  let title, emoji;
+  if(tries===1){ title="İnanılmaz"; emoji="🤯"; }
+  else if(tries<=3){ title="Çok iyi"; emoji="🎉"; }
+  else if(tries===4){ title="Fena değil"; emoji="👍"; }
+  else { title="ehh"; emoji="😅"; }
+  return {emoji, title, text:`Kelimeyi ${tries}/6 denemede buldun.`};
 }
+
+/* ---------- istatistik ---------- */
+function getStats(){
+  return store.get("stats") || {played:0, wins:0, streak:0, max:0, dist:{1:0,2:0,3:0,4:0,5:0,6:0}};
+}
+function updateStats(win, tries){
+  const s=getStats();
+  s.played++;
+  if(win){
+    s.wins++; s.streak++;
+    if(s.streak>s.max) s.max=s.streak;
+    s.dist[tries]=(s.dist[tries]||0)+1;
+  } else { s.streak=0; }
+  store.set("stats", s);
+  return s;
+}
+function renderStats(){
+  const s=getStats();
+  document.getElementById("st-played").textContent=s.played;
+  document.getElementById("st-win").textContent = s.played? Math.round(s.wins/s.played*100):0;
+  document.getElementById("st-streak").textContent=s.streak;
+  document.getElementById("st-max").textContent=s.max;
+  const dist=document.getElementById("dist");
+  const vals=[1,2,3,4,5,6].map(i=>s.dist[i]||0);
+  const max=Math.max(1,...vals);
+  const curTries = current && current.win ? current.guesses.length : -1;
+  dist.innerHTML="";
+  for(let i=1;i<=6;i++){
+    const v=s.dist[i]||0;
+    const w=Math.max(9, Math.round(v/max*100));
+    const row=document.createElement("div"); row.className="dist-row";
+    row.innerHTML=`<span class="dist-idx">${i}</span>`+
+      `<div class="dist-bar${i===curTries?' cur':''}" style="width:${w}%">${v}</div>`;
+    dist.appendChild(row);
+  }
+}
+
+/* ---------- küçük ön-popup ---------- */
+function showMini(){
+  const fb=feedback(current.win, current.guesses.length);
+  document.getElementById("mini-emoji").textContent=fb.emoji;
+  document.getElementById("mini-text").textContent=fb.title;
+  document.getElementById("mini").classList.remove("hidden");
+}
+function hideMini(){ document.getElementById("mini").classList.add("hidden"); }
 
 /* ---------- popup + paylaş ---------- */
 function openModal(justFinished){
@@ -256,6 +307,7 @@ function openModal(justFinished){
   document.getElementById("modal-emoji").textContent=fb.emoji;
   document.getElementById("modal-title").textContent=fb.title;
   document.getElementById("modal-text").textContent=fb.text;
+  renderStats();
   document.getElementById("share-preview").textContent=buildShareText();
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
@@ -265,7 +317,7 @@ function closeModal(){ document.getElementById("overlay").classList.add("hidden"
 function buildShareText(){
   const no=puzzleNo(current.date)+1;
   const tries=current.win?current.guesses.length:"X";
-  let out=`TDK Wordle #${no} ${tries}/6\n${formatTR(current.date)}\n\n`;
+  let out=`Harfle #${no} ${tries}/6\n${formatTR(current.date)}\n\n`;
   current.guesses.forEach(g=>{
     scoreGuess(g,current.word).forEach(s=>{
       out+= s==="correct"?"🟩":s==="present"?"🟨":"⬛";
