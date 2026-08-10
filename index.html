@@ -1,0 +1,107 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#121213">
+<title>TDK Wordle — Türkçe Kelime Oyunu</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23538d4e'/><text y='74' x='50' font-size='68' text-anchor='middle' font-family='Arial' font-weight='bold' fill='white'>T</text></svg>">
+<link rel="stylesheet" href="style.css">
+
+<div id="app">
+
+  <!-- ANA EKRAN -->
+  <section id="home" class="screen">
+    <div class="home-inner">
+      <h1 class="logo">TDK<span>Wordle</span></h1>
+      <p class="tagline">Her gün yeni bir Türkçe kelime. 6 hakkın var.</p>
+      <div class="home-buttons">
+        <button class="menu-btn primary" data-go="game">🎯 Günlük Oyun</button>
+        <button class="menu-btn" data-go="howto">📖 Nasıl Oynanır?</button>
+        <button class="menu-btn" data-go="archive">🗄️ Arşiv</button>
+      </div>
+      <p class="home-date" id="home-date"></p>
+      <p class="credit">Kelimeler TDK sözlüğünden derlenmiştir.</p>
+    </div>
+  </section>
+
+  <!-- NASIL OYNANIR -->
+  <section id="howto" class="screen hidden">
+    <header class="bar">
+      <button class="icon-btn" data-go="home">←</button>
+      <span class="bar-title">Nasıl Oynanır?</span>
+      <span class="spacer"></span>
+    </header>
+    <div class="sheet">
+      <p>Gizli <b>5 harfli</b> Türkçe kelimeyi <b>6 denemede</b> bul.</p>
+      <p>Her tahminden sonra kutuların rengi ipucu verir:</p>
+      <div class="example">
+        <div class="tile correct">K</div>
+        <div class="tile">A</div>
+        <div class="tile">L</div>
+        <div class="tile">E</div>
+        <div class="tile">M</div>
+      </div>
+      <p><b>K</b> harfi kelimede var ve <b>doğru yerde</b> (yeşil).</p>
+      <div class="example">
+        <div class="tile">K</div>
+        <div class="tile present">A</div>
+        <div class="tile">L</div>
+        <div class="tile">E</div>
+        <div class="tile">M</div>
+      </div>
+      <p><b>A</b> harfi kelimede var ama <b>yanlış yerde</b> (sarı).</p>
+      <div class="example">
+        <div class="tile">K</div>
+        <div class="tile">A</div>
+        <div class="tile absent">L</div>
+        <div class="tile">E</div>
+        <div class="tile">M</div>
+      </div>
+      <p><b>L</b> harfi kelimede <b>hiç yok</b> (gri).</p>
+      <hr>
+      <p>Her gün <b>tek</b> ve <b>herkese aynı</b> bir kelime yayınlanır — ve her gün öncekilerden farklıdır. Geçmiş günleri <b>Arşiv</b>'den oynayabilirsin.</p>
+      <button class="menu-btn primary wide" data-go="game">Hadi başla</button>
+    </div>
+  </section>
+
+  <!-- ARŞİV -->
+  <section id="archive" class="screen hidden">
+    <header class="bar">
+      <button class="icon-btn" data-go="home">←</button>
+      <span class="bar-title">Arşiv — Son 3 Ay</span>
+      <span class="spacer"></span>
+    </header>
+    <div class="archive-list" id="archive-list"></div>
+  </section>
+
+  <!-- OYUN -->
+  <section id="game" class="screen hidden">
+    <header class="bar">
+      <button class="icon-btn" data-go="home">←</button>
+      <div class="bar-center">
+        <span class="bar-title" id="game-title">Günlük Oyun</span>
+        <span class="bar-sub" id="game-sub"></span>
+      </div>
+      <button class="icon-btn" id="stats-btn" title="Sonuç">📊</button>
+    </header>
+    <div id="message" class="message"></div>
+    <div id="board" class="board"></div>
+    <div id="keyboard" class="keyboard"></div>
+  </section>
+
+  <!-- PAYLAŞ / SONUÇ POPUP -->
+  <div id="overlay" class="overlay hidden">
+    <div class="modal">
+      <button class="modal-close" id="modal-close">✕</button>
+      <div id="modal-emoji" class="modal-emoji">🎉</div>
+      <h2 id="modal-title">Tebrikler!</h2>
+      <p id="modal-text" class="modal-text"></p>
+      <pre id="share-preview" class="share-preview"></pre>
+      <button class="menu-btn primary wide" id="share-btn">📤 Paylaş</button>
+      <button class="menu-btn wide" id="modal-archive" data-go="archive">🗄️ Arşive Git</button>
+      <div id="copied-toast" class="copied-toast hidden">Panoya kopyalandı ✓</div>
+    </div>
+  </div>
+
+</div>
+
+<script src="words.js"></script>
+<script src="game.js"></script>
