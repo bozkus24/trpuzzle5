@@ -48,10 +48,12 @@ body{
   display:flex; align-items:center; justify-content:space-between;
   padding:10px 12px; border-bottom:1px solid var(--border); min-height:54px;
 }
-.bar-center{display:flex; flex-direction:column; align-items:center; line-height:1.2}
-.bar-title{font-weight:800; font-size:18px; letter-spacing:.5px}
-.bar-sub{color:var(--muted); font-size:12px; margin-top:2px}
+.bar-center{display:flex; flex-direction:column; align-items:center; line-height:1.2; min-width:0; overflow:hidden}
+.bar-title{font-weight:800; font-size:17px; letter-spacing:.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%}
+.bar-sub{color:var(--muted); font-size:12px; margin-top:2px; white-space:nowrap}
 .spacer{width:40px}
+.bar-logo{height:38px; width:auto; display:block; flex:none}
+.bar-actions{display:flex; align-items:center; gap:0; flex:none}
 .icon-btn{
   background:none; border:none; color:var(--text); font-size:22px;
   width:40px; height:40px; border-radius:8px; cursor:pointer;

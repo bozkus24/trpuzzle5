@@ -61,25 +61,22 @@ const store = {
 };
 
 /* ---------- ekran yönetimi ---------- */
-const screens = ["home","howto","archive","game"];
+const screens = ["howto","archive","game"];
 function show(id){
   screens.forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id));
   if(id==="archive") buildArchive();
-  if(id==="home") refreshHomeDate();
 }
 document.addEventListener("click", e=>{
+  // yalnızca ekran değiştir (aktif oyuna dön)
+  const back = e.target.closest("[data-show]");
+  if(back){ closeModal(); show(back.getAttribute("data-show")); return; }
+  // günlük oyunu aç/yenile veya başka ekrana git
   const t = e.target.closest("[data-go]");
   if(!t) return;
   const dest = t.getAttribute("data-go");
   if(dest==="game"){ startGame(new Date()); }
   else { closeModal(); show(dest); }
 });
-
-function refreshHomeDate(){
-  const today=new Date();
-  document.getElementById("home-date").textContent =
-    `${formatTR(today)} · Bulmaca #${puzzleNo(today)+1}`;
-}
 
 /* ================= OYUN ================= */
 let current = null; // {date, key, word, guesses:[], done, win}
@@ -392,5 +389,4 @@ function buildArchive(){
 }
 
 /* ---------- başlat ---------- */
-refreshHomeDate();
-show("home");
+startGame(new Date());

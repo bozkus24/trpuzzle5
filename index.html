@@ -7,25 +7,10 @@
 
 <div id="app">
 
-  <!-- ANA EKRAN -->
-  <section id="home" class="screen">
-    <div class="home-inner">
-      <h1 class="logo">Harfle</h1>
-      <p class="tagline">Her gün yeni bir Türkçe kelime. 6 hakkın var.</p>
-      <div class="home-buttons">
-        <button class="menu-btn primary" data-go="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg><span>Günlük Oyun</span></button>
-        <button class="menu-btn" data-go="howto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg><span>Nasıl Oynanır?</span></button>
-        <button class="menu-btn" data-go="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg><span>Arşiv</span></button>
-      </div>
-      <p class="home-date" id="home-date"></p>
-      <p class="credit">Türkçe 5 harfli kelime bulmaca oyunu.</p>
-    </div>
-  </section>
-
   <!-- NASIL OYNANIR -->
   <section id="howto" class="screen hidden">
     <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
+      <button class="icon-btn" data-show="game" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
       <span class="bar-title">Nasıl Oynanır?</span>
       <span class="spacer"></span>
     </header>
@@ -58,14 +43,14 @@
       <p><b>L</b> harfi kelimede <b>hiç yok</b> (gri).</p>
       <hr>
       <p>Her gün <b>tek</b> ve <b>herkese aynı</b> bir kelime yayınlanır — ve her gün öncekilerden farklıdır. Geçmiş günleri <b>Arşiv</b>'den oynayabilirsin.</p>
-      <button class="menu-btn primary wide" data-go="game">Hadi başla</button>
+      <button class="menu-btn primary wide" data-show="game">Hadi başla</button>
     </div>
   </section>
 
   <!-- ARŞİV -->
   <section id="archive" class="screen hidden">
     <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
+      <button class="icon-btn" data-show="game" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
       <span class="bar-title">Arşiv — Son 3 Ay</span>
       <span class="spacer"></span>
     </header>
@@ -75,12 +60,16 @@
   <!-- OYUN -->
   <section id="game" class="screen hidden">
     <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
+      <img class="bar-logo" src="logo.png" alt="Harfle">
       <div class="bar-center">
         <span class="bar-title" id="game-title">Günlük Oyun</span>
         <span class="bar-sub" id="game-sub"></span>
       </div>
-      <button class="icon-btn" id="stats-btn" title="Sonuç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-6"/><path d="M3.5 20h17"/></svg></button>
+      <div class="bar-actions">
+        <button class="icon-btn" data-go="howto" aria-label="Nasıl Oynanır?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg></button>
+        <button class="icon-btn" data-go="archive" aria-label="Arşiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></button>
+        <button class="icon-btn" id="stats-btn" aria-label="Sonuç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-6"/><path d="M3.5 20h17"/></svg></button>
+      </div>
     </header>
     <div id="message" class="message"></div>
     <div id="board" class="board"></div>
