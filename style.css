@@ -112,7 +112,7 @@ body{
   flex:1; display:flex; flex-direction:column; align-items:center;
   min-height:0; position:relative;
 }
-.play .eq{flex:1 1 0; min-height:8px}
+.play .eq{flex:1 1 0; min-height:2px}
 .message{
   position:absolute; top:6px; left:50%; transform:translateX(-50%);
   display:flex; align-items:center; justify-content:center; font-weight:700; z-index:5;
@@ -128,9 +128,10 @@ body{
 }
 .row{display:flex; gap:6px}
 .tile{
-  width:56px; height:56px; border:2px solid var(--border);
+  width:min(56px, 16.5vw, 7.4dvh); height:min(56px, 16.5vw, 7.4dvh);
+  border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
-  font-size:28px; font-weight:800; text-transform:uppercase; color:var(--text);
+  font-size:min(28px, 8vw, 3.6dvh); font-weight:800; text-transform:uppercase; color:var(--text);
   border-radius:4px; user-select:none;
 }
 .tile.filled{border-color:var(--muted); animation:bump .1s ease}
@@ -156,7 +157,7 @@ body{
 .keyboard{padding:6px 4px 12px; display:flex; flex-direction:column; gap:6px}
 .krow{display:flex; justify-content:center; gap:5px}
 .key{
-  min-width:30px; height:52px; border:none; border-radius:6px;
+  min-width:30px; height:min(52px, 6.4dvh); border:none; border-radius:6px;
   background:var(--key); color:var(--key-text); font-size:14px; font-weight:700;
   cursor:pointer; flex:1; padding:0 2px; text-transform:uppercase;
 }
