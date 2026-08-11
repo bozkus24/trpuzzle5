@@ -5,6 +5,15 @@
   --accent:#538d4e;
   --radius:10px;
 }
+/* aydınlık tema */
+body.light{
+  --bg:#ffffff; --panel:#ffffff; --text:#1a1a1b; --muted:#787c7e;
+  --border:#d3d6da; --key:#d3d6da; --key-text:#1a1a1b;
+  --correct:#6aaa64; --present:#c9b458; --absent:#787c7e;
+  --accent:#6aaa64;
+}
+/* renk körü modu (yüksek kontrast) — her iki temada da geçerli */
+body.cb{ --correct:#f5793a; --present:#85c0f9; --accent:#f5793a; }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
@@ -52,14 +61,21 @@ body{
 .bar-title{font-weight:800; font-size:17px; letter-spacing:.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%}
 .bar-sub{color:var(--muted); font-size:12px; margin-top:2px; white-space:nowrap}
 .spacer{width:40px}
-.bar-logo{height:38px; width:auto; display:block; flex:none}
+.bar-logo{height:36px; width:auto; display:block; flex:none}
+.bar-brand{display:flex; align-items:center; gap:8px; flex:none}
+.bar-name{font-weight:800; font-size:20px; letter-spacing:.5px; color:var(--text)}
 .bar-actions{display:flex; align-items:center; gap:0; flex:none}
+.puzzle-info{
+  text-align:center; color:var(--muted); font-size:13px; font-weight:600;
+  padding:10px 12px 0; letter-spacing:.2px;
+}
 .icon-btn{
-  background:none; border:none; color:var(--text); font-size:22px;
-  width:40px; height:40px; border-radius:8px; cursor:pointer;
+  background:none; border:none; color:var(--text);
+  width:36px; height:40px; border-radius:8px; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
 }
 .icon-btn:hover{background:var(--panel)}
-.icon-btn svg{width:22px; height:22px}
+.icon-btn svg{width:21px; height:21px}
 
 /* ---------- NASIL OYNANIR ---------- */
 .sheet{padding:20px 22px; overflow:auto; line-height:1.6}
@@ -117,6 +133,7 @@ body{
 .tile.correct{background:var(--correct); border-color:var(--correct)}
 .tile.present{background:var(--present); border-color:var(--present)}
 .tile.absent{background:var(--absent); border-color:var(--absent)}
+.tile.correct,.tile.present,.tile.absent{color:#fff}
 .tile.reveal{animation:flip .5s ease forwards}
 @keyframes flip{
   0%{transform:rotateX(0)} 50%{transform:rotateX(90deg)} 100%{transform:rotateX(0)}
@@ -144,6 +161,7 @@ body{
 .key.correct{background:var(--correct)}
 .key.present{background:var(--present)}
 .key.absent{background:var(--absent)}
+.key.correct,.key.present,.key.absent{color:#fff}
 
 /* ---------- POPUP ---------- */
 .overlay{
@@ -209,3 +227,20 @@ body{
   60%{transform:translate(-50%,-50%) scale(1.08)}
   100%{transform:translate(-50%,-50%) scale(1); opacity:1}
 }
+
+/* ---------- AYARLAR ---------- */
+.settings-modal{max-width:340px; text-align:left}
+.settings-h{font-size:20px; margin:0 0 16px; text-align:center}
+.setting-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px 0}
+.setting-name{font-weight:700; font-size:15px}
+.setting-desc{color:var(--muted); font-size:12px; margin-top:2px}
+.switch{
+  width:48px; height:28px; border-radius:999px; background:var(--border);
+  border:none; position:relative; cursor:pointer; flex:none; transition:background .2s;
+}
+.switch[aria-checked="true"]{background:var(--correct)}
+.switch .knob{
+  position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%;
+  background:#fff; transition:left .2s;
+}
+.switch[aria-checked="true"] .knob{left:23px}

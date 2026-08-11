@@ -25,7 +25,9 @@ const SVG = {
   thumb:   _S('<path d="M7 10.5V20H4V10.5z"/><path d="M7 10.5l3.6-6.8A1.8 1.8 0 0 1 14 4.6V9h4.4a2 2 0 0 1 2 2.4l-1.2 6A2 2 0 0 1 17.2 19H7z"/>'),
   neutral: _S('<circle cx="12" cy="12" r="9"/><path d="M8.5 15h7"/><circle cx="9" cy="10.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.2" r="0.9" fill="currentColor" stroke="none"/>'),
   sad:     _S('<circle cx="12" cy="12" r="9"/><path d="M8.4 16a4 4 0 0 1 7.2 0"/><circle cx="9" cy="10.2" r="0.9" fill="currentColor" stroke="none"/><circle cx="15" cy="10.2" r="0.9" fill="currentColor" stroke="none"/>'),
-  backspace: _S('<path d="M21 5H8.4a2 2 0 0 0-1.5.7L2.6 11a1.4 1.4 0 0 0 0 1.9l4.3 5.3a2 2 0 0 0 1.5.8H21a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M12 9.5l5 5M17 9.5l-5 5"/>')
+  backspace: _S('<path d="M21 5H8.4a2 2 0 0 0-1.5.7L2.6 11a1.4 1.4 0 0 0 0 1.9l4.3 5.3a2 2 0 0 0 1.5.8H21a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M12 9.5l5 5M17 9.5l-5 5"/>'),
+  sun:     _S('<circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/>'),
+  moon:    _S('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>')
 };
 
 /* Oyunun başlangıç günü — 1. bulmaca bu gün. */
@@ -97,10 +99,9 @@ function startGame(date){
   current.row = current.guesses.length;
   current.input = "";
 
-  document.getElementById("game-sub").textContent =
-    `${formatTR(d)} · #${puzzleNo(d)+1}`;
   const isToday = dayDiff(d,new Date())===0;
-  document.getElementById("game-title").textContent = isToday ? "Günlük Oyun" : "Arşiv Oyunu";
+  document.getElementById("game-sub").textContent =
+    `${isToday?"":"Arşiv · "}${formatTR(d)} · Bulmaca #${puzzleNo(d)+1}`;
 
   buildBoard();
   buildKeyboard();
@@ -388,5 +389,46 @@ function buildArchive(){
   }
 }
 
+/* ---------- tema (aydınlık / karanlık) ---------- */
+function themeIcon(){
+  const light=document.body.classList.contains("light");
+  const btn=document.getElementById("theme-btn");
+  btn.innerHTML = light ? SVG.moon : SVG.sun;
+  btn.setAttribute("aria-label", light ? "Karanlık moda geç" : "Aydınlık moda geç");
+}
+function applyTheme(){
+  document.body.classList.toggle("light", store.get("theme")==="light");
+  themeIcon();
+}
+document.getElementById("theme-btn").addEventListener("click", ()=>{
+  const light=!document.body.classList.contains("light");
+  document.body.classList.toggle("light", light);
+  store.set("theme", light ? "light" : "dark");
+  themeIcon();
+});
+
+/* ---------- renk körü modu ---------- */
+function applyCb(){
+  const on = store.get("cb")===1;
+  document.body.classList.toggle("cb", on);
+  document.getElementById("cb-toggle").setAttribute("aria-checked", on?"true":"false");
+}
+document.getElementById("cb-toggle").addEventListener("click", ()=>{
+  store.set("cb", store.get("cb")===1 ? 0 : 1);
+  applyCb();
+});
+
+/* ---------- ayarlar popup ---------- */
+document.getElementById("settings-btn").addEventListener("click", ()=>{
+  document.getElementById("settings").classList.remove("hidden");
+});
+document.addEventListener("click", e=>{
+  const c=e.target.closest("[data-close]");
+  if(c){ document.getElementById(c.getAttribute("data-close")).classList.add("hidden"); return; }
+  if(e.target.id==="settings"){ document.getElementById("settings").classList.add("hidden"); }
+});
+
 /* ---------- başlat ---------- */
+applyTheme();
+applyCb();
 startGame(new Date());

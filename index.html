@@ -60,17 +60,19 @@
   <!-- OYUN -->
   <section id="game" class="screen hidden">
     <header class="bar">
-      <img class="bar-logo" src="logo.png" alt="Harfle">
-      <div class="bar-center">
-        <span class="bar-title" id="game-title">Günlük Oyun</span>
-        <span class="bar-sub" id="game-sub"></span>
+      <div class="bar-brand">
+        <img class="bar-logo" src="logo.png" alt="Harfle">
+        <span class="bar-name">Harfle</span>
       </div>
       <div class="bar-actions">
         <button class="icon-btn" data-go="howto" aria-label="Nasıl Oynanır?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg></button>
         <button class="icon-btn" data-go="archive" aria-label="Arşiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></button>
         <button class="icon-btn" id="stats-btn" aria-label="Sonuç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-6"/><path d="M3.5 20h17"/></svg></button>
+        <button class="icon-btn" id="settings-btn" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 0 1-4 0v-.11a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 13.5H4.5a2 2 0 0 1 0-4h.1A1.7 1.7 0 0 0 5.8 6.63l-.06-.06A2 2 0 1 1 8.57 3.74l.06.06a1.7 1.7 0 0 0 2.87-1.2V2.5a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9.5a1.7 1.7 0 0 0 1.4.9h.1a2 2 0 0 1 0 4h-.11a1.7 1.7 0 0 0-1.53.9z"/></svg></button>
+        <button class="icon-btn" id="theme-btn" aria-label="Tema"></button>
       </div>
     </header>
+    <div class="puzzle-info" id="game-sub"></div>
     <div id="message" class="message"></div>
     <div id="board" class="board"></div>
     <div id="keyboard" class="keyboard"></div>
@@ -104,6 +106,21 @@
       <button class="menu-btn primary wide" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 13.3l7.2 4.2M15.6 6.5l-7.2 4.2"/></svg><span>Paylaş</span></button>
       <button class="menu-btn wide" id="modal-archive" data-go="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg><span>Arşive Git</span></button>
       <div id="copied-toast" class="copied-toast hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5L9.2 17.3 4 12.1"/></svg><span>Panoya kopyalandı</span></div>
+    </div>
+  </div>
+
+  <!-- AYARLAR POPUP -->
+  <div id="settings" class="overlay hidden">
+    <div class="modal settings-modal">
+      <button class="modal-close" data-close="settings" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      <h2 class="settings-h">Ayarlar</h2>
+      <div class="setting-row">
+        <div class="setting-txt">
+          <div class="setting-name">Renk körü modu</div>
+          <div class="setting-desc">Yüksek kontrastlı renkler (turuncu / mavi)</div>
+        </div>
+        <button class="switch" id="cb-toggle" role="switch" aria-checked="false" aria-label="Renk körü modu"><span class="knob"></span></button>
+      </div>
     </div>
   </div>
 
