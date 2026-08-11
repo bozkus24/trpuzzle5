@@ -198,6 +198,7 @@ function drawInput(){
 }
 
 document.addEventListener("keydown",e=>{
+  if(store.get("osk")===1) return;   // yalnızca ekran klavyesi girişi
   if(document.getElementById("game").classList.contains("hidden")) return;
   if(!document.getElementById("overlay").classList.contains("hidden")) return;
   if(e.key==="Enter") handleKey("ENTER");
@@ -390,22 +391,22 @@ function buildArchive(){
 }
 
 /* ---------- tema (aydınlık / karanlık) ---------- */
+const isLight = () => document.body.classList.contains("light");
 function themeIcon(){
-  const light=document.body.classList.contains("light");
   const btn=document.getElementById("theme-btn");
-  btn.innerHTML = light ? SVG.moon : SVG.sun;
-  btn.setAttribute("aria-label", light ? "Karanlık moda geç" : "Aydınlık moda geç");
+  btn.innerHTML = isLight() ? SVG.moon : SVG.sun;
+  btn.setAttribute("aria-label", isLight() ? "Karanlık moda geç" : "Aydınlık moda geç");
 }
-function applyTheme(){
-  document.body.classList.toggle("light", store.get("theme")==="light");
-  themeIcon();
-}
-document.getElementById("theme-btn").addEventListener("click", ()=>{
-  const light=!document.body.classList.contains("light");
+function setTheme(light){
   document.body.classList.toggle("light", light);
   store.set("theme", light ? "light" : "dark");
   themeIcon();
-});
+  // ayarlardaki "Karanlık mod" anahtarı: karanlıkta açık
+  document.getElementById("dark-toggle").setAttribute("aria-checked", light ? "false" : "true");
+}
+function applyTheme(){ setTheme(store.get("theme")==="light"); }
+document.getElementById("theme-btn").addEventListener("click", ()=> setTheme(!isLight()));
+document.getElementById("dark-toggle").addEventListener("click", ()=> setTheme(!isLight()));
 
 /* ---------- renk körü modu ---------- */
 function applyCb(){
@@ -416,6 +417,16 @@ function applyCb(){
 document.getElementById("cb-toggle").addEventListener("click", ()=>{
   store.set("cb", store.get("cb")===1 ? 0 : 1);
   applyCb();
+});
+
+/* ---------- yalnızca ekran klavyesi girişi ---------- */
+const oskOnly = () => store.get("osk")===1;
+function applyOsk(){
+  document.getElementById("osk-toggle").setAttribute("aria-checked", oskOnly()?"true":"false");
+}
+document.getElementById("osk-toggle").addEventListener("click", ()=>{
+  store.set("osk", oskOnly() ? 0 : 1);
+  applyOsk();
 });
 
 /* ---------- ayarlar popup ---------- */
@@ -431,4 +442,5 @@ document.addEventListener("click", e=>{
 /* ---------- başlat ---------- */
 applyTheme();
 applyCb();
+applyOsk();
 startGame(new Date());
