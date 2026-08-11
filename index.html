@@ -67,14 +67,18 @@
       <div class="bar-actions">
         <button class="icon-btn" data-go="howto" aria-label="Nasıl Oynanır?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg></button>
         <button class="icon-btn" data-go="archive" aria-label="Arşiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></button>
-        <button class="icon-btn" id="stats-btn" aria-label="Sonuç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-6"/><path d="M3.5 20h17"/></svg></button>
-        <button class="icon-btn" id="theme-btn" aria-label="Tema"></button>
+        <button class="icon-btn" id="stats-btn" aria-label="Sonuç"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="3.5" y="12" width="4.3" height="8" rx="1"/><rect x="9.9" y="6" width="4.3" height="14" rx="1"/><rect x="16.3" y="14.5" width="4.3" height="5.5" rx="1"/></svg></button>
         <button class="icon-btn" id="settings-btn" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="10" cy="8" r="2.6" fill="currentColor" stroke="none"/><circle cx="15" cy="16" r="2.6" fill="currentColor" stroke="none"/></svg></button>
       </div>
     </header>
-    <div class="puzzle-info" id="game-sub"></div>
-    <div id="message" class="message"></div>
-    <div id="board" class="board"></div>
+    <div class="play">
+      <div class="eq"></div>
+      <div class="puzzle-info" id="game-sub"></div>
+      <div class="eq"></div>
+      <div id="board" class="board"></div>
+      <div class="eq"></div>
+      <div id="message" class="message"></div>
+    </div>
     <div id="keyboard" class="keyboard"></div>
   </section>
 
@@ -130,10 +134,10 @@
       </div>
       <div class="setting-row">
         <div class="setting-txt">
-          <div class="setting-name">Yalnızca ekran klavyesi girişi</div>
-          <div class="setting-desc">Ekran klavyesi dışındaki tuş girişlerini yok say. Konuşma tanıma veya diğer yardımcı cihazları kullanan kullanıcılar için en faydalı seçenektir.</div>
+          <div class="setting-name">Ekran klavyesi modu</div>
+          <div class="setting-desc">Yalnızca ekran klavyesini kullan.</div>
         </div>
-        <button class="switch" id="osk-toggle" role="switch" aria-checked="false" aria-label="Yalnızca ekran klavyesi girişi"><span class="knob"></span></button>
+        <button class="switch" id="osk-toggle" role="switch" aria-checked="false" aria-label="Ekran klavyesi modu"><span class="knob"></span></button>
       </div>
     </div>
   </div>

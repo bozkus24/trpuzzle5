@@ -31,8 +31,8 @@ const SVG = {
 };
 
 /* Oyunun başlangıç günü — 1. bulmaca bu gün. */
-const EPOCH = new Date(2026, 0, 1);           // 1 Ocak 2026
-const ARCHIVE_DAYS = 92;                       // ~3 ay
+const EPOCH = new Date(2026, 7, 1);           // 1 Ağustos 2026
+const ARCHIVE_DAYS = 92;                       // ~3 ay (en erken 1 Ağustos 2026)
 
 const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
                    "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
@@ -390,22 +390,15 @@ function buildArchive(){
   }
 }
 
-/* ---------- tema (aydınlık / karanlık) ---------- */
+/* ---------- tema (aydınlık / karanlık) — ayarlardan ---------- */
 const isLight = () => document.body.classList.contains("light");
-function themeIcon(){
-  const btn=document.getElementById("theme-btn");
-  btn.innerHTML = isLight() ? SVG.moon : SVG.sun;
-  btn.setAttribute("aria-label", isLight() ? "Karanlık moda geç" : "Aydınlık moda geç");
-}
 function setTheme(light){
   document.body.classList.toggle("light", light);
   store.set("theme", light ? "light" : "dark");
-  themeIcon();
   // ayarlardaki "Karanlık mod" anahtarı: karanlıkta açık
   document.getElementById("dark-toggle").setAttribute("aria-checked", light ? "false" : "true");
 }
 function applyTheme(){ setTheme(store.get("theme")==="light"); }
-document.getElementById("theme-btn").addEventListener("click", ()=> setTheme(!isLight()));
 document.getElementById("dark-toggle").addEventListener("click", ()=> setTheme(!isLight()));
 
 /* ---------- renk körü modu ---------- */
