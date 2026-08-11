@@ -63,7 +63,7 @@ const store = {
 };
 
 /* ---------- ekran yönetimi ---------- */
-const screens = ["howto","archive","game"];
+const screens = ["archive","game"];
 function show(id){
   screens.forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id));
   if(id==="archive") buildArchive();
@@ -422,14 +422,23 @@ document.getElementById("osk-toggle").addEventListener("click", ()=>{
   applyOsk();
 });
 
-/* ---------- ayarlar popup ---------- */
+/* ---------- popup aç/kapat (ayarlar, nasıl oynanır) ---------- */
 document.getElementById("settings-btn").addEventListener("click", ()=>{
   document.getElementById("settings").classList.remove("hidden");
 });
 document.addEventListener("click", e=>{
+  const op=e.target.closest("[data-open]");
+  if(op){ document.getElementById(op.getAttribute("data-open")).classList.remove("hidden"); return; }
   const c=e.target.closest("[data-close]");
   if(c){ document.getElementById(c.getAttribute("data-close")).classList.add("hidden"); return; }
   if(e.target.id==="settings"){ document.getElementById("settings").classList.add("hidden"); }
+  if(e.target.id==="howto"){ document.getElementById("howto").classList.add("hidden"); }
+});
+
+/* ---------- nasıl oynanır: Anladım + bir daha gösterme ---------- */
+document.getElementById("howto-ok").addEventListener("click", ()=>{
+  if(document.getElementById("howto-dont").checked) store.set("howtoSeen", 1);
+  document.getElementById("howto").classList.add("hidden");
 });
 
 /* ---------- başlat ---------- */
@@ -437,3 +446,5 @@ applyTheme();
 applyCb();
 applyOsk();
 startGame(new Date());
+// ilk açılışta "Nasıl Oynanır?" popup'ı (daha önce "bir daha gösterme" seçilmediyse)
+if(store.get("howtoSeen")!==1){ document.getElementById("howto").classList.remove("hidden"); }
