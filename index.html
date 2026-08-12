@@ -117,24 +117,29 @@
       <h2 class="settings-h">Ayarlar</h2>
       <div class="setting-row">
         <div class="setting-txt">
-          <div class="setting-name">Karanlık mod</div>
-          <div class="setting-desc">Koyu ve açık tema arasında geçiş yap.</div>
+          <div class="setting-name">Tema</div>
+          <div class="setting-desc">Koyu veya açık.</div>
         </div>
-        <button class="switch" id="dark-toggle" role="switch" aria-checked="true" aria-label="Karanlık mod"><span class="knob"></span></button>
+        <div class="select-wrap">
+          <select id="theme-select" aria-label="Tema">
+            <option value="dark">Koyu</option>
+            <option value="light">Açık</option>
+          </select>
+          <span class="select-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
       </div>
       <div class="setting-row">
         <div class="setting-txt">
           <div class="setting-name">Renk körü modu</div>
-          <div class="setting-desc">Yüksek kontrastlı renkler (turuncu / mavi).</div>
         </div>
         <button class="switch" id="cb-toggle" role="switch" aria-checked="false" aria-label="Renk körü modu"><span class="knob"></span></button>
       </div>
       <div class="setting-row">
         <div class="setting-txt">
-          <div class="setting-name">Ekran klavyesi modu</div>
-          <div class="setting-desc">Yalnızca ekran klavyesini kullan.</div>
+          <div class="setting-name">Ekran klavyesi</div>
+          <div class="setting-desc">Fiziksel klavye kullanıyorsanız kapatabilirsiniz.</div>
         </div>
-        <button class="switch" id="osk-toggle" role="switch" aria-checked="false" aria-label="Ekran klavyesi modu"><span class="knob"></span></button>
+        <button class="switch" id="osk-toggle" role="switch" aria-checked="false" aria-label="Ekran klavyesi"><span class="knob"></span></button>
       </div>
     </div>
   </div>

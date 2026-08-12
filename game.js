@@ -404,11 +404,10 @@ const isLight = () => document.body.classList.contains("light");
 function setTheme(light){
   document.body.classList.toggle("light", light);
   store.set("theme", light ? "light" : "dark");
-  // ayarlardaki "Karanlık mod" anahtarı: karanlıkta açık
-  document.getElementById("dark-toggle").setAttribute("aria-checked", light ? "false" : "true");
+  document.getElementById("theme-select").value = light ? "light" : "dark";
 }
 function applyTheme(){ setTheme(store.get("theme")==="light"); }
-document.getElementById("dark-toggle").addEventListener("click", ()=> setTheme(!isLight()));
+document.getElementById("theme-select").addEventListener("change", e=> setTheme(e.target.value==="light"));
 
 /* ---------- renk körü modu ---------- */
 function applyCb(){

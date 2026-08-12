@@ -256,11 +256,25 @@ body{
 }
 
 /* ---------- AYARLAR ---------- */
-.settings-modal{max-width:340px; text-align:left}
+.settings-modal{max-width:360px; text-align:left}
 .settings-h{font-size:20px; margin:0 0 16px; text-align:center}
-.setting-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:6px 0}
-.setting-name{font-weight:700; font-size:15px}
-.setting-desc{color:var(--muted); font-size:12px; margin-top:2px}
+.settings-modal .settings-h{text-align:left; font-size:26px; margin:0 0 6px}
+.setting-row{display:flex; align-items:center; justify-content:space-between; gap:14px; padding:18px 0}
+.setting-row + .setting-row{border-top:1px solid var(--border)}
+.setting-name{font-weight:800; font-size:17px}
+.setting-desc{color:var(--muted); font-size:13px; margin-top:3px}
+/* tema seçici (dropdown) */
+.select-wrap{position:relative; display:inline-flex; align-items:center; flex:none}
+.select-wrap select{
+  appearance:none; -webkit-appearance:none; font-family:inherit;
+  background:var(--border); color:var(--text);
+  border:none; border-radius:10px; padding:10px 40px 10px 16px;
+  font-size:16px; font-weight:700; cursor:pointer;
+}
+.select-wrap .select-caret{
+  position:absolute; right:12px; pointer-events:none; display:flex; color:var(--text);
+}
+.select-wrap .select-caret svg{width:18px; height:18px}
 .switch{
   width:48px; height:28px; border-radius:999px; background:var(--border);
   border:none; position:relative; cursor:pointer; flex:none; transition:background .2s;
