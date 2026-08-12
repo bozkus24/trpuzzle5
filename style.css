@@ -192,6 +192,7 @@ body{
   color:var(--muted); cursor:pointer; line-height:0;
 }
 .modal-close svg{width:18px; height:18px; display:block}
+.modal-close.x-text{font-size:24px; line-height:1; width:28px; height:28px}
 .modal-emoji{line-height:0}
 .modal-emoji svg{width:54px; height:54px}
 .modal-emoji.good{color:var(--correct)}

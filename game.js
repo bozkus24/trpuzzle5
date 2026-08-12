@@ -305,11 +305,20 @@ function hideMini(){ document.getElementById("mini").classList.add("hidden"); }
 
 /* ---------- popup + paylaş ---------- */
 function openModal(justFinished){
-  const fb=feedback(current.win, current.guesses.length);
-  const me=document.getElementById("modal-emoji");
-  me.innerHTML=fb.icon; me.className="modal-emoji "+fb.cls;
-  document.getElementById("modal-title").textContent=fb.title;
-  document.getElementById("modal-text").textContent=fb.text;
+  const done = !!(current && current.done);
+  const title=document.getElementById("modal-title");
+  const text=document.getElementById("modal-text");
+  if(done){
+    // oyun bitti: geri bildirim (kaybedildiyse cevabı göster)
+    const fb=feedback(current.win, current.guesses.length);
+    title.textContent=fb.title;
+    text.textContent=fb.text;
+  } else {
+    // oyun sürüyor: yalnızca istatistik, cevabı ASLA gösterme
+    title.textContent="İstatistik";
+    text.textContent="";
+  }
+  document.getElementById("share-btn").style.display = done ? "" : "none";
   renderStats();
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
