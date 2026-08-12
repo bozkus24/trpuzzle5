@@ -194,8 +194,10 @@ body{
 }
 .dontshow input:checked{border-color:var(--muted)}
 .dontshow input:checked::after{
-  content:""; position:absolute; left:4px; top:0; width:6px; height:11px;
-  border:solid var(--text); border-width:0 2px 2px 0; transform:rotate(45deg);
+  content:""; position:absolute; left:50%; top:44%;
+  width:5px; height:9px;
+  border:solid var(--text); border-width:0 2px 2px 0;
+  transform:translate(-50%,-50%) rotate(45deg);
 }
 .modal-close{
   position:absolute; top:10px; right:12px; background:none; border:none;
