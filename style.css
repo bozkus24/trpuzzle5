@@ -79,7 +79,7 @@ body{
 
 /* ---------- NASIL OYNANIR ---------- */
 .sheet{padding:20px 22px; overflow:auto; line-height:1.6}
-.sheet p{margin:10px 0; color:#dcdcdc}
+.sheet p{margin:10px 0; color:var(--text)}
 .sheet hr{border:none; border-top:1px solid var(--border); margin:18px 0}
 .example{display:flex; gap:6px; margin:10px 0}
 .example .tile{width:44px; height:44px; font-size:20px}
@@ -187,7 +187,16 @@ body{
   display:flex; align-items:center; justify-content:flex-start; gap:8px;
   margin:16px 2px 6px; color:var(--muted); font-size:14px; cursor:pointer;
 }
-.dontshow input{width:16px; height:16px; accent-color:var(--correct); cursor:pointer}
+.dontshow input{
+  appearance:none; -webkit-appearance:none; margin:0; flex:none;
+  width:18px; height:18px; border:2px solid var(--border); border-radius:4px;
+  background:var(--bg); cursor:pointer; position:relative;
+}
+.dontshow input:checked{border-color:var(--muted)}
+.dontshow input:checked::after{
+  content:""; position:absolute; left:4px; top:0; width:6px; height:11px;
+  border:solid var(--text); border-width:0 2px 2px 0; transform:rotate(45deg);
+}
 .modal-close{
   position:absolute; top:10px; right:12px; background:none; border:none;
   color:var(--muted); cursor:pointer; line-height:0;
@@ -199,7 +208,7 @@ body{
 .modal-emoji.good{color:var(--correct)}
 .modal-emoji.bad{color:#d9564e}
 .modal h2{margin:8px 0 4px; font-size:24px}
-.modal-text{color:#dcdcdc; margin-bottom:14px}
+.modal-text{color:var(--text); margin-bottom:14px}
 .copied-toast{
   margin-top:10px; color:var(--correct); font-weight:700; font-size:14px;
   display:flex; align-items:center; justify-content:center; gap:6px;
@@ -217,7 +226,7 @@ body{
 .stat-lbl{font-size:11px; color:var(--muted); margin-top:2px; line-height:1.15}
 .dist{display:flex; flex-direction:column; gap:5px}
 .dist-row{display:flex; align-items:center; gap:8px; font-size:13px}
-.dist-idx{width:12px; color:#dcdcdc; font-weight:700; text-align:center}
+.dist-idx{width:12px; color:var(--text); font-weight:700; text-align:center}
 .dist-bar{
   background:var(--absent); color:#fff; text-align:right; padding:2px 8px;
   border-radius:4px; min-width:24px; font-weight:700; font-size:12px;
