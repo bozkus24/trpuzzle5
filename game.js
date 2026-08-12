@@ -437,7 +437,12 @@ document.getElementById("settings-btn").addEventListener("click", ()=>{
 });
 document.addEventListener("click", e=>{
   const op=e.target.closest("[data-open]");
-  if(op){ document.getElementById(op.getAttribute("data-open")).classList.remove("hidden"); return; }
+  if(op){
+    const id=op.getAttribute("data-open");
+    if(id==="howto") document.getElementById("howto-dont-row").style.display="none"; // elle açılınca "bir daha gösterme" yok
+    document.getElementById(id).classList.remove("hidden");
+    return;
+  }
   const c=e.target.closest("[data-close]");
   if(c){ document.getElementById(c.getAttribute("data-close")).classList.add("hidden"); return; }
   if(e.target.id==="settings"){ document.getElementById("settings").classList.add("hidden"); }
@@ -456,4 +461,7 @@ applyCb();
 applyOsk();
 startGame(new Date());
 // ilk açılışta "Nasıl Oynanır?" popup'ı (daha önce "bir daha gösterme" seçilmediyse)
-if(store.get("howtoSeen")!==1){ document.getElementById("howto").classList.remove("hidden"); }
+if(store.get("howtoSeen")!==1){
+  document.getElementById("howto-dont-row").style.display="";   // açılışta kutucuk görünür
+  document.getElementById("howto").classList.remove("hidden");
+}
