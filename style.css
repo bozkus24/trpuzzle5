@@ -133,7 +133,7 @@ body{
   border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
   font-size:min(28px, 8vw, 3.6dvh); font-weight:800; text-transform:uppercase; color:var(--text);
-  border-radius:4px; user-select:none;
+  border-radius:0; user-select:none;
 }
 .tile.filled{border-color:var(--muted); animation:bump .1s ease}
 @keyframes bump{from{transform:scale(1)}50%{transform:scale(1.08)}to{transform:scale(1)}}
@@ -216,6 +216,15 @@ body{
   display:flex; align-items:center; justify-content:center; gap:6px;
 }
 .copied-toast svg{width:16px; height:16px}
+
+/* ---------- GÜNÜN SONUCU ---------- */
+.result-grid{margin:2px 0 6px}
+.result-head{font-weight:800; font-size:14px; margin-bottom:8px}
+.result-rows{display:flex; flex-direction:column; gap:4px; align-items:center}
+.result-row{display:flex; gap:4px}
+.res{width:20px; height:20px; background:var(--absent)}
+.res.correct{background:var(--correct)}
+.res.present{background:var(--present)}
 
 /* ---------- İSTATİSTİK ---------- */
 .stats-title{

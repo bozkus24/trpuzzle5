@@ -318,10 +318,26 @@ function openModal(justFinished){
     title.textContent="İstatistik";
     text.textContent="";
   }
+  // günün sonucu (renkli kare grid) — yalnızca oyun bitince
+  const rg=document.getElementById("result-grid");
+  if(done){ rg.innerHTML=buildResultGridHTML(); rg.style.display=""; }
+  else { rg.innerHTML=""; rg.style.display="none"; }
+
   document.getElementById("share-btn").style.display = done ? "" : "none";
   renderStats();
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
+}
+function buildResultGridHTML(){
+  const no=puzzleNo(current.date)+1;
+  const tries=current.win?current.guesses.length:"X";
+  let h=`<div class="result-head">Harfle #${no} · ${tries}/6</div><div class="result-rows">`;
+  current.guesses.forEach(g=>{
+    h+=`<div class="result-row">`;
+    scoreGuess(g,current.word).forEach(s=>{ h+=`<span class="res ${s}"></span>`; });
+    h+=`</div>`;
+  });
+  return h+`</div>`;
 }
 function closeModal(){ document.getElementById("overlay").classList.add("hidden"); }
 
