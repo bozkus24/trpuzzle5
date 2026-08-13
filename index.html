@@ -7,65 +7,50 @@
 
 <div id="app">
 
-  <!-- ANA EKRAN -->
-  <section id="home" class="screen">
-    <div class="home-inner">
-      <h1 class="logo">Harfle</h1>
-      <p class="tagline">Her gün yeni bir Türkçe kelime. 6 hakkın var.</p>
-      <div class="home-buttons">
-        <button class="menu-btn primary" data-go="game"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg><span>Günlük Oyun</span></button>
-        <button class="menu-btn" data-go="howto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg><span>Nasıl Oynanır?</span></button>
-        <button class="menu-btn" data-go="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg><span>Arşiv</span></button>
+  <!-- NASIL OYNANIR (POPUP) -->
+  <div id="howto" class="overlay hidden">
+    <div class="modal howto-modal">
+      <button class="modal-close" data-close="howto" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      <h2 class="settings-h">Nasıl Oynanır?</h2>
+      <div class="sheet">
+        <p>Gizli <b>5 harfli</b> Türkçe kelimeyi <b>6 denemede</b> bul.</p>
+        <p>Her tahminden sonra kutuların rengi ipucu verir:</p>
+        <div class="example">
+          <div class="tile correct">K</div>
+          <div class="tile">A</div>
+          <div class="tile">L</div>
+          <div class="tile">E</div>
+          <div class="tile">M</div>
+        </div>
+        <p><b>K</b> harfi kelimede var ve <b>doğru yerde</b> (yeşil).</p>
+        <div class="example">
+          <div class="tile">K</div>
+          <div class="tile present">A</div>
+          <div class="tile">L</div>
+          <div class="tile">E</div>
+          <div class="tile">M</div>
+        </div>
+        <p><b>A</b> harfi kelimede var ama <b>yanlış yerde</b> (sarı).</p>
+        <div class="example">
+          <div class="tile">K</div>
+          <div class="tile">A</div>
+          <div class="tile absent">L</div>
+          <div class="tile">E</div>
+          <div class="tile">M</div>
+        </div>
+        <p><b>L</b> harfi kelimede <b>hiç yok</b> (gri).</p>
+        <hr>
+        <p>Her gün <b>tek</b> ve <b>herkese aynı</b> bir kelime yayınlanır — ve her gün öncekilerden farklıdır. Geçmiş günleri <b>Arşiv</b>'den oynayabilirsin.</p>
       </div>
-      <p class="home-date" id="home-date"></p>
-      <p class="credit">Türkçe 5 harfli kelime bulmaca oyunu.</p>
+      <label class="dontshow" id="howto-dont-row"><input type="checkbox" id="howto-dont"><span>Bir daha gösterme</span></label>
+      <button class="menu-btn primary wide" id="howto-ok">Anladım</button>
     </div>
-  </section>
-
-  <!-- NASIL OYNANIR -->
-  <section id="howto" class="screen hidden">
-    <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
-      <span class="bar-title">Nasıl Oynanır?</span>
-      <span class="spacer"></span>
-    </header>
-    <div class="sheet">
-      <p>Gizli <b>5 harfli</b> Türkçe kelimeyi <b>6 denemede</b> bul.</p>
-      <p>Her tahminden sonra kutuların rengi ipucu verir:</p>
-      <div class="example">
-        <div class="tile correct">K</div>
-        <div class="tile">A</div>
-        <div class="tile">L</div>
-        <div class="tile">E</div>
-        <div class="tile">M</div>
-      </div>
-      <p><b>K</b> harfi kelimede var ve <b>doğru yerde</b> (yeşil).</p>
-      <div class="example">
-        <div class="tile">K</div>
-        <div class="tile present">A</div>
-        <div class="tile">L</div>
-        <div class="tile">E</div>
-        <div class="tile">M</div>
-      </div>
-      <p><b>A</b> harfi kelimede var ama <b>yanlış yerde</b> (sarı).</p>
-      <div class="example">
-        <div class="tile">K</div>
-        <div class="tile">A</div>
-        <div class="tile absent">L</div>
-        <div class="tile">E</div>
-        <div class="tile">M</div>
-      </div>
-      <p><b>L</b> harfi kelimede <b>hiç yok</b> (gri).</p>
-      <hr>
-      <p>Her gün <b>tek</b> ve <b>herkese aynı</b> bir kelime yayınlanır — ve her gün öncekilerden farklıdır. Geçmiş günleri <b>Arşiv</b>'den oynayabilirsin.</p>
-      <button class="menu-btn primary wide" data-go="game">Hadi başla</button>
-    </div>
-  </section>
+  </div>
 
   <!-- ARŞİV -->
   <section id="archive" class="screen hidden">
     <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
+      <button class="icon-btn" data-show="game" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
       <span class="bar-title">Arşiv — Son 3 Ay</span>
       <span class="spacer"></span>
     </header>
@@ -75,16 +60,24 @@
   <!-- OYUN -->
   <section id="game" class="screen hidden">
     <header class="bar">
-      <button class="icon-btn" data-go="home" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
-      <div class="bar-center">
-        <span class="bar-title" id="game-title">Günlük Oyun</span>
-        <span class="bar-sub" id="game-sub"></span>
+      <div class="bar-brand">
+        <img class="bar-logo" src="logo.png" alt="Harfle">
+        <span class="bar-name">Harfle</span>
       </div>
-      <button class="icon-btn" id="stats-btn" title="Sonuç"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-6"/><path d="M3.5 20h17"/></svg></button>
+      <div class="bar-actions">
+        <button class="icon-btn" data-open="howto" aria-label="Nasıl Oynanır?"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.3a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.2-2.7 4"/><circle cx="12" cy="17.3" r="0.7" fill="currentColor" stroke="none"/></svg></button>
+        <button class="icon-btn" data-go="archive" aria-label="Arşiv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></button>
+        <button class="icon-btn" id="stats-btn" aria-label="Sonuç"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="3.5" y="12" width="4.3" height="8" rx="1"/><rect x="9.9" y="6" width="4.3" height="14" rx="1"/><rect x="16.3" y="14.5" width="4.3" height="5.5" rx="1"/></svg></button>
+        <button class="icon-btn" id="settings-btn" aria-label="Ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="10" cy="8" r="2.6" fill="currentColor" stroke="none"/><circle cx="15" cy="16" r="2.6" fill="currentColor" stroke="none"/></svg></button>
+      </div>
     </header>
-    <div id="message" class="message"></div>
-    <div id="board" class="board"></div>
+    <div class="play">
+      <div class="puzzle-info" id="game-sub"></div>
+      <div id="board" class="board"></div>
+      <div id="message" class="message"></div>
+    </div>
     <div id="keyboard" class="keyboard"></div>
+    <div class="grow"></div>
   </section>
 
   <!-- KÜÇÜK ÖN-POPUP -->
@@ -96,8 +89,7 @@
   <!-- SONUÇ / İSTATİSTİK POPUP -->
   <div id="overlay" class="overlay hidden">
     <div class="modal">
-      <button class="modal-close" id="modal-close" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-      <div id="modal-emoji" class="modal-emoji"></div>
+      <button class="modal-close x-text" id="modal-close" aria-label="Kapat">×</button>
       <h2 id="modal-title">Tebrikler!</h2>
       <p id="modal-text" class="modal-text"></p>
 
@@ -112,9 +104,43 @@
       <div class="stats-title">TAHMİN DAĞILIMI</div>
       <div class="dist" id="dist"></div>
 
-      <button class="menu-btn primary wide" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 13.3l7.2 4.2M15.6 6.5l-7.2 4.2"/></svg><span>Paylaş</span></button>
-      <button class="menu-btn wide" id="modal-archive" data-go="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg><span>Arşive Git</span></button>
-      <div id="copied-toast" class="copied-toast hidden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6.5L9.2 17.3 4 12.1"/></svg><span>Panoya kopyalandı</span></div>
+      <button class="menu-btn primary wide" id="share-btn">Paylaş</button>
+      <button class="menu-btn wide" id="modal-archive" data-go="archive">Arşive Git</button>
+      <div id="copied-toast" class="copied-toast hidden">Panoya kopyalandı</div>
+    </div>
+  </div>
+
+  <!-- AYARLAR POPUP -->
+  <div id="settings" class="overlay hidden">
+    <div class="modal settings-modal">
+      <button class="modal-close" data-close="settings" aria-label="Kapat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+      <h2 class="settings-h">Ayarlar</h2>
+      <div class="setting-row">
+        <div class="setting-txt">
+          <div class="setting-name">Tema</div>
+          <div class="setting-desc">Koyu veya açık.</div>
+        </div>
+        <div class="select-wrap">
+          <select id="theme-select" aria-label="Tema">
+            <option value="dark">Koyu</option>
+            <option value="light">Açık</option>
+          </select>
+          <span class="select-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-txt">
+          <div class="setting-name">Renk körü modu</div>
+        </div>
+        <button class="switch" id="cb-toggle" role="switch" aria-checked="false" aria-label="Renk körü modu"><span class="knob"></span></button>
+      </div>
+      <div class="setting-row">
+        <div class="setting-txt">
+          <div class="setting-name">Ekran klavyesi</div>
+          <div class="setting-desc">Fiziksel klavye kullanıyorsanız kapatabilirsiniz.</div>
+        </div>
+        <button class="switch" id="osk-toggle" role="switch" aria-checked="false" aria-label="Ekran klavyesi"><span class="knob"></span></button>
+      </div>
     </div>
   </div>
 
