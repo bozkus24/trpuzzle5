@@ -248,8 +248,17 @@ function submitGuess(){
 
 /* ---------- geri bildirim ---------- */
 function feedback(win, tries){
-  if(!win) return {icon:SVG.sad, cls:"bad", title:"Maalesef başaramadın", text:`Kelime: ${current.word}`};
-  return {icon:SVG.star, cls:"good", title:"Tebrikler!", text:`Kelimeyi ${tries} denemede buldun.`};
+  if(!win) return {icon:SVG.sad, cls:"bad", title:"Yarın tekrar dene!", text:`Kelime: ${current.word}`};
+  const M = {
+    1:["Dahi olmalısın!", SVG.trophy],
+    2:["Büyüleyici!",     SVG.star],
+    3:["Etkileyici!",     SVG.star],
+    4:["Harika!",         SVG.star],
+    5:["Güzel",           SVG.thumb],
+    6:["Fena değil...",   SVG.neutral]
+  };
+  const [title, icon] = M[tries] || ["Tebrikler!", SVG.star];
+  return {icon, cls:"good", title, text:`Kelimeyi ${tries} denemede buldun.`};
 }
 
 /* ---------- istatistik ---------- */
