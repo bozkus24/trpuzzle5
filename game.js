@@ -248,16 +248,10 @@ function submitGuess(){
 
 /* ---------- geri bildirim ---------- */
 function feedback(win, tries){
-  if(!win) return {icon:SVG.sad, cls:"bad", title:"Yarın tekrar dene!", text:`Kelime: ${current.word}`};
-  const M = {
-    1:["Dahi olmalısın!", SVG.trophy],
-    2:["Büyüleyici!",     SVG.star],
-    3:["Etkileyici!",     SVG.star],
-    4:["Harika!",         SVG.star],
-    5:["Güzel",           SVG.thumb],
-    6:["Fena değil...",   SVG.neutral]
-  };
-  const [title, icon] = M[tries] || ["Tebrikler!", SVG.star];
+  if(!win) return {icon:"", cls:"bad", title:"Yarın tekrar dene!", text:`Kelime: ${current.word}`};
+  const M = {1:"Dahi olmalısın!", 2:"Büyüleyici!", 3:"Etkileyici!", 4:"Harika!", 5:"Güzel", 6:"Fena değil..."};
+  const title = M[tries] || "Tebrikler!";
+  const icon = tries===5 ? SVG.thumb : "";   // yalnızca "Güzel"de SVG
   return {icon, cls:"good", title, text:`Kelimeyi ${tries} denemede buldun.`};
 }
 
@@ -302,6 +296,7 @@ function showMini(){
   const fb=feedback(current.win, current.guesses.length);
   const ic=document.getElementById("mini-emoji");
   ic.innerHTML=fb.icon; ic.className="m-emoji "+fb.cls;
+  ic.style.display = fb.icon ? "" : "none";   // SVG yoksa boşluk bırakma
   document.getElementById("mini-text").textContent=fb.title;
   document.getElementById("mini").classList.remove("hidden");
 }
