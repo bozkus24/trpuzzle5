@@ -100,6 +100,7 @@ function startGame(date){
   current.input = "";
 
   const isToday = dayDiff(d,new Date())===0;
+  current.isToday = isToday;
   document.getElementById("game-sub").textContent =
     `${isToday?"":"Arşiv · "}${formatTR(d)} · Bulmaca #${puzzleNo(d)+1}`;
 
@@ -235,7 +236,7 @@ function submitGuess(){
   store.set(current.key, {word:current.word, guesses:current.guesses, done:current.done, win:current.win});
 
   if(over){
-    updateStats(win, current.guesses.length);
+    if(current.isToday) updateStats(win, current.guesses.length);   // arşiv oyunları istatistiğe işlemez
     const delay = COLS*160 + 500 + (win?600:0);
     if(win){ setTimeout(()=>document.querySelector(`.row[data-r="${r}"]`).classList.add("win"), COLS*160+300); }
     // önce küçük popup, sonra sonuç/istatistik ekranı
@@ -317,13 +318,18 @@ function openModal(justFinished){
     title.textContent="İstatistik";
     text.textContent="";
   }
+  const daily = !!(current && current.isToday);   // yalnızca günlük oyun istatistik/paylaş gösterir
+
   // günün sonucu (renkli kare grid) — yalnızca oyun bitince
   const rg=document.getElementById("result-grid");
   if(done){ rg.innerHTML=buildResultGridHTML(); rg.style.display=""; }
   else { rg.innerHTML=""; rg.style.display="none"; }
 
-  document.getElementById("share-btn").style.display = done ? "" : "none";
-  renderStats();
+  // arşiv oyununda genel istatistikler ve paylaş gösterilmez
+  document.getElementById("general-stats").style.display = daily ? "" : "none";
+  document.getElementById("share-btn").style.display = (done && daily) ? "" : "none";
+  if(daily) renderStats();
+
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
 }
