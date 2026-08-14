@@ -109,7 +109,7 @@ function startGame(date){
   renderFromState();
   show("game");
   msg("");
-  if(current.done){ setTimeout(()=>openModal(false), 350); }
+  if(current.done){ setTimeout(()=>openResult(), 350); }
 }
 
 function buildBoard(){
@@ -242,14 +242,14 @@ function submitGuess(){
     // önce küçük popup, sonra sonuç/istatistik ekranı
     setTimeout(()=>{
       showMini();
-      setTimeout(()=>{ hideMini(); openModal(true); }, 1500);
+      setTimeout(()=>{ hideMini(); openResult(); }, 1500);
     }, delay);
   }
 }
 
 /* ---------- geri bildirim ---------- */
-function feedback(win, tries){
-  if(!win) return {icon:"", cls:"bad", title:"Yarın tekrar dene!", text:`Kelime: ${current.word}`};
+function feedback(win, tries, word){
+  if(!win) return {icon:"", cls:"bad", title:"Yarın tekrar dene!", text:`Kelime: ${word}`};
   const M = {1:"Dahi olmalısın!", 2:"Büyüleyici!", 3:"Etkileyici!", 4:"Harika!", 5:"Güzel", 6:"Fena değil..."};
   const title = M[tries] || "Tebrikler!";
   const icon = tries===5 ? SVG.thumb : "";   // yalnızca "Güzel"de SVG
@@ -280,7 +280,7 @@ function renderStats(){
   const dist=document.getElementById("dist");
   const vals=[1,2,3,4,5,6].map(i=>s.dist[i]||0);
   const max=Math.max(1,...vals);
-  const curTries = current && current.win ? current.guesses.length : -1;
+  const curTries = modalG && modalG.win ? modalG.guesses.length : -1;
   dist.innerHTML="";
   for(let i=1;i<=6;i++){
     const v=s.dist[i]||0;
@@ -294,7 +294,7 @@ function renderStats(){
 
 /* ---------- küçük ön-popup ---------- */
 function showMini(){
-  const fb=feedback(current.win, current.guesses.length);
+  const fb=feedback(current.win, current.guesses.length, current.word);
   const ic=document.getElementById("mini-emoji");
   ic.innerHTML=fb.icon; ic.className="m-emoji "+fb.cls;
   ic.style.display = fb.icon ? "" : "none";   // SVG yoksa boşluk bırakma
@@ -304,42 +304,58 @@ function showMini(){
 function hideMini(){ document.getElementById("mini").classList.add("hidden"); }
 
 /* ---------- popup + paylaş ---------- */
-function openModal(justFinished){
-  const done = !!(current && current.done);
+let modalG = null;   // modalın hangi oyunu gösterdiği (current veya bugün)
+
+function stateForDate(d){
+  d=startOfDay(d);
+  const key=dateKey(d);
+  const word=wordForDate(d);
+  const st=loadState(key, word);
+  return {date:d, key, word, guesses:st.guesses, done:st.done, win:st.win, isToday:dayDiff(d,new Date())===0};
+}
+
+// tek render: g = gösterilecek oyun; general = genel istatistik göster; share = paylaş göster
+function showModal(g, general, share){
+  modalG=g;
+  const done=!!g.done;
   const title=document.getElementById("modal-title");
   const text=document.getElementById("modal-text");
   if(done){
-    // oyun bitti: geri bildirim (kaybedildiyse cevabı göster)
-    const fb=feedback(current.win, current.guesses.length);
-    title.textContent=fb.title;
-    text.textContent=fb.text;
+    const fb=feedback(g.win, g.guesses.length, g.word);
+    title.textContent=fb.title; text.textContent=fb.text;
   } else {
-    // oyun sürüyor: yalnızca istatistik, cevabı ASLA gösterme
-    title.textContent="İstatistik";
-    text.textContent="";
+    title.textContent="İstatistik"; text.textContent="";
   }
-  const daily = !!(current && current.isToday);   // yalnızca günlük oyun istatistik/paylaş gösterir
-
-  // günün sonucu (renkli kare grid) — yalnızca oyun bitince
   const rg=document.getElementById("result-grid");
   if(done){ rg.innerHTML=buildResultGridHTML(); rg.style.display=""; }
   else { rg.innerHTML=""; rg.style.display="none"; }
 
-  // arşiv oyununda genel istatistikler ve paylaş gösterilmez
-  document.getElementById("general-stats").style.display = daily ? "" : "none";
-  document.getElementById("share-btn").style.display = (done && daily) ? "" : "none";
-  if(daily) renderStats();
+  document.getElementById("general-stats").style.display = general ? "" : "none";
+  document.getElementById("share-btn").style.display = (share && done) ? "" : "none";
+  if(general) renderStats();
 
   document.getElementById("copied-toast").classList.add("hidden");
   document.getElementById("overlay").classList.remove("hidden");
 }
+
+// oyun bitince/açılınca çıkan popup: günlük -> tam; arşiv -> yalnızca o günün sonucu
+function openResult(){
+  const daily = !!(current && current.isToday);
+  showModal(current, daily, daily);
+}
+// İstatistik butonu: HER ZAMAN bugünün günlük istatistik ekranı (arşivden bağımsız)
+function openStats(){
+  showModal(stateForDate(new Date()), true, true);
+}
+
 function buildResultGridHTML(){
-  const no=puzzleNo(current.date)+1;
-  const tries=current.win?current.guesses.length:"X";
+  const g=modalG;
+  const no=puzzleNo(g.date)+1;
+  const tries=g.win?g.guesses.length:"X";
   let h=`<div class="result-head">Harfle #${no} · ${tries}/6</div><div class="result-rows">`;
-  current.guesses.forEach(g=>{
+  g.guesses.forEach(gs=>{
     h+=`<div class="result-row">`;
-    scoreGuess(g,current.word).forEach(s=>{ h+=`<span class="res ${s}"></span>`; });
+    scoreGuess(gs,g.word).forEach(s=>{ h+=`<span class="res ${s}"></span>`; });
     h+=`</div>`;
   });
   return h+`</div>`;
@@ -347,11 +363,12 @@ function buildResultGridHTML(){
 function closeModal(){ document.getElementById("overlay").classList.add("hidden"); }
 
 function buildShareText(){
-  const no=puzzleNo(current.date)+1;
-  const tries=current.win?current.guesses.length:"X";
-  let out=`Harfle #${no} ${tries}/6\n${formatTR(current.date)}\n\n`;
-  current.guesses.forEach(g=>{
-    scoreGuess(g,current.word).forEach(s=>{
+  const g=modalG;
+  const no=puzzleNo(g.date)+1;
+  const tries=g.win?g.guesses.length:"X";
+  let out=`Harfle #${no} ${tries}/6\n${formatTR(g.date)}\n\n`;
+  g.guesses.forEach(gs=>{
+    scoreGuess(gs,g.word).forEach(s=>{
       out+= s==="correct"?"🟩":s==="present"?"🟨":"⬛";
     });
     out+="\n";
@@ -375,7 +392,7 @@ document.getElementById("share-btn").addEventListener("click", async ()=>{
   }
 });
 document.getElementById("modal-close").addEventListener("click", closeModal);
-document.getElementById("stats-btn").addEventListener("click", ()=>{ if(current) openModal(false); });
+document.getElementById("stats-btn").addEventListener("click", openStats);
 
 /* ---------- animasyon/mesaj ---------- */
 let msgTimer=null;
