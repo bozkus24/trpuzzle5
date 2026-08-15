@@ -45,6 +45,7 @@ const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
 const dayDiff = (a,b) => Math.round((startOfDay(a)-startOfDay(b))/86400000);
 const puzzleNo = d => dayDiff(d, EPOCH);            // 0-based -> +1 gösterirken
 const formatTR = d => `${d.getDate()} ${TR_MONTHS[d.getMonth()]} ${TR_DAYS[d.getDay()]} ${d.getFullYear()}`;
+const formatTRShort = d => `${d.getDate()} ${TR_MONTHS[d.getMonth()]} ${d.getFullYear()}`;   // günsüz
 
 /* Sabit tohumlu karıştırma (her gün benzersiz, öncekilerden farklı kelime) */
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
@@ -102,7 +103,7 @@ function startGame(date){
   const isToday = dayDiff(d,new Date())===0;
   current.isToday = isToday;
   document.getElementById("game-sub").textContent =
-    `${isToday?"":"Arşiv · "}${formatTR(d)} · Bulmaca #${puzzleNo(d)+1}`;
+    `${isToday?"Günün Oyunu":"Arşiv"} · ${formatTRShort(d)}`;
 
   buildBoard();
   buildKeyboard();
@@ -215,6 +216,7 @@ function submitGuess(){
   const guess=current.input;
   const lower=guess.toLocaleLowerCase("tr-TR");
   if(!ACCEPTED.has(lower)){ shake(); msg("Kelime listede yok"); return; }
+  if(hardMode()){ const err=hardModeError(guess); if(err){ shake(); msg(err); return; } }
 
   const r=current.row;
   const res=scoreGuess(guess,current.word);
@@ -369,7 +371,7 @@ function buildShareText(){
   let out=`Harfle #${no} ${tries}/6\n${formatTR(g.date)}\n\n`;
   g.guesses.forEach(gs=>{
     scoreGuess(gs,g.word).forEach(s=>{
-      out+= s==="correct"?"🟩":s==="present"?"🟨":"⬛";
+      out+= s==="correct"?"🟩":s==="present"?"🟨":"⬜";
     });
     out+="\n";
   });
@@ -418,17 +420,15 @@ function buildArchive(){
     const isToday=i===0;
     const item=document.createElement("div");
     item.className="archive-item"+(isToday?" today":"");
-    let statusHTML;
+    let statusHTML = "";
     if(st && st.done){
       statusHTML = st.win
         ? `<span class="pegs win">${SVG.check}${st.guesses.length}/6</span>`
         : `<span class="pegs lose">${SVG.cross}X/6</span>`;
-    } else {
-      statusHTML = `<span class="pegs play">${SVG.play}</span>`;
     }
     item.innerHTML=`
       <div>
-        <div class="a-date">${formatTR(d)}${isToday?'<span class="badge-today">BUGÜN</span>':''}</div>
+        <div class="a-date">${formatTRShort(d)}${isToday?'<span class="badge-today">BUGÜN</span>':''}</div>
         <div class="a-num">Bulmaca #${puzzleNo(d)+1}</div>
       </div>
       <div class="a-status">${statusHTML}</div>`;
@@ -468,6 +468,30 @@ document.getElementById("osk-toggle").addEventListener("click", ()=>{
   applyOsk();
 });
 
+/* ---------- zor mod ---------- */
+const hardMode = () => store.get("hard")===1;
+function applyHard(){
+  document.getElementById("hard-toggle").setAttribute("aria-checked", hardMode()?"true":"false");
+}
+document.getElementById("hard-toggle").addEventListener("click", ()=>{
+  store.set("hard", hardMode() ? 0 : 1);
+  applyHard();
+});
+// açığa çıkan ipuçları sonraki tahminde kullanılmalı; ihlal varsa hata mesajı döndürür
+function hardModeError(guess){
+  const g=[...guess], ans=current.word;
+  for(const prev of current.guesses){
+    const res=scoreGuess(prev, ans), pg=[...prev];
+    for(let i=0;i<COLS;i++){
+      if(res[i]==="correct" && g[i]!==pg[i]) return `${i+1}. harf ${pg[i]} olmalı`;
+    }
+    for(let i=0;i<COLS;i++){
+      if(res[i]==="present" && !g.includes(pg[i])) return `Tahmin ${pg[i]} harfini içermeli`;
+    }
+  }
+  return null;
+}
+
 /* ---------- popup aç/kapat (ayarlar, nasıl oynanır) ---------- */
 document.getElementById("settings-btn").addEventListener("click", ()=>{
   document.getElementById("settings").classList.remove("hidden");
@@ -496,6 +520,7 @@ document.getElementById("howto-ok").addEventListener("click", ()=>{
 applyTheme();
 applyCb();
 applyOsk();
+applyHard();
 startGame(new Date());
 // ilk açılışta "Nasıl Oynanır?" popup'ı (daha önce "bir daha gösterme" seçilmediyse)
 if(store.get("howtoSeen")!==1){
