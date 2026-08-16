@@ -169,7 +169,7 @@ body{
 .keyboard{padding:6px 4px 14px; display:flex; flex-direction:column; gap:8px}
 .krow{display:flex; justify-content:center; gap:6px}
 .key{
-  min-width:0; height:min(66px, 7.6dvh); border:none; border-radius:9px;
+  min-width:0; height:min(66px, 7.6dvh); border:none; border-radius:5px;
   background:var(--key); color:var(--key-text); font-size:17px; font-weight:700;
   cursor:pointer; flex:1; padding:0; text-transform:uppercase;
 }
