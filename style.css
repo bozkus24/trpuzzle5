@@ -140,10 +140,10 @@ body{
 }
 .row{display:flex; gap:4px}
 .tile{
-  width:min(66px, 17.5vw, 7.6dvh); height:min(66px, 17.5vw, 7.6dvh);
+  width:min(74px, 18.5vw, 8dvh); height:min(74px, 18.5vw, 8dvh);
   border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
-  font-size:min(31px, 9vw, 3.9dvh); font-weight:800; text-transform:uppercase; color:var(--text);
+  font-size:min(34px, 9.5vw, 4.2dvh); font-weight:800; text-transform:uppercase; color:var(--text);
   border-radius:0; user-select:none;
 }
 .tile.filled{border-color:var(--muted); animation:bump .1s ease}
