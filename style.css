@@ -140,10 +140,10 @@ body{
 }
 .row{display:flex; gap:4px}
 .tile{
-  width:min(56px, 16.5vw, 7.4dvh); height:min(56px, 16.5vw, 7.4dvh);
+  width:min(66px, 17.5vw, 7.6dvh); height:min(66px, 17.5vw, 7.6dvh);
   border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
-  font-size:min(28px, 8vw, 3.6dvh); font-weight:800; text-transform:uppercase; color:var(--text);
+  font-size:min(31px, 9vw, 3.9dvh); font-weight:800; text-transform:uppercase; color:var(--text);
   border-radius:0; user-select:none;
 }
 .tile.filled{border-color:var(--muted); animation:bump .1s ease}
@@ -169,8 +169,8 @@ body{
 .keyboard{padding:6px 4px 12px; display:flex; flex-direction:column; gap:6px}
 .krow{display:flex; justify-content:center; gap:5px}
 .key{
-  min-width:30px; height:min(52px, 6.4dvh); border:none; border-radius:6px;
-  background:var(--key); color:var(--key-text); font-size:14px; font-weight:700;
+  min-width:32px; height:min(60px, 7.0dvh); border:none; border-radius:6px;
+  background:var(--key); color:var(--key-text); font-size:16px; font-weight:700;
   cursor:pointer; flex:1; padding:0 2px; text-transform:uppercase;
 }
 .key:active{filter:brightness(.85)}
