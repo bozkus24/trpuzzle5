@@ -166,11 +166,11 @@ body{
 @keyframes jump{0%,100%{transform:translateY(0)}40%{transform:translateY(-16px)}}
 
 /* ---------- KLAVYE ---------- */
-.keyboard{padding:6px 3px 12px; display:flex; flex-direction:column; gap:6px}
-.krow{display:flex; justify-content:center; gap:4px}
+.keyboard{padding:6px 4px 14px; display:flex; flex-direction:column; gap:8px}
+.krow{display:flex; justify-content:center; gap:6px}
 .key{
-  min-width:0; height:min(60px, 7.0dvh); border:none; border-radius:6px;
-  background:var(--key); color:var(--key-text); font-size:16px; font-weight:700;
+  min-width:0; height:min(66px, 7.6dvh); border:none; border-radius:9px;
+  background:var(--key); color:var(--key-text); font-size:17px; font-weight:700;
   cursor:pointer; flex:1; padding:0; text-transform:uppercase;
 }
 .key:active{filter:brightness(.85)}
