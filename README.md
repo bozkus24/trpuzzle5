@@ -12,7 +12,7 @@ derlenmiştir.
 - 📊 **İstatistik ekranı** — oynanan, galibiyet %, seri galibiyet, seri rekoru ve tahmin dağılımı grafiği.
 - 📤 **Paylaş** — mobilde native paylaşım (WhatsApp vb. direkt açılır); sonucu 🟩🟨⬛ emojili görsel olarak paylaşır/kopyalar.
 - Türkçe klavye ve doğru büyük/küçük harf (i/İ, ı/I) desteği.
-- Kelime havuzu tamamen `kelimehavuzu.txt` dosyasından üretilir (5585 kelime); hem günlük gizli kelime hem kabul edilen tahminler yalnızca bu listeden gelir.
+- Kelime havuzu iki dosyadan üretilir: `cevaplar.txt` (sorulabilecek gizli kelimeler, 2788) ve `kelimehavuzu.txt` (kabul edilen tahminler, 5585). Günlük gizli kelime `cevaplar.txt`'ten, kabul edilen tahminler her iki listeden gelir.
 - Tamamen çevrimdışı çalışır; tahminler yalnızca yerel listeye göre doğrulanır (harici servis/istek yok).
 - Arayüzde emoji yoktur; tüm ikonlar SVG'dir. (Yalnızca paylaşım metni, tanınırlık için klasik 🟩🟨⬛ karelerini içerir.)
 
@@ -28,4 +28,4 @@ python3 -m http.server 8000
 - `index.html` — ekranlar (ana menü, nasıl oynanır, arşiv, oyun, paylaş popup'ı)
 - `style.css` — koyu tema arayüz
 - `game.js` — oyun mantığı, günlük kelime seçimi, arşiv, paylaşım
-- `words.js` — `kelimehavuzu.txt`'ten üretilen kelime listeleri
+- `words.js` — `cevaplar.txt` (ANSWERS) ve `kelimehavuzu.txt` (ACCEPTED) dosyalarından üretilen kelime listeleri
