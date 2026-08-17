@@ -22,6 +22,16 @@
         <div class="example"><div class="tile absent">K</div></div>
         <p><b>K</b> harfi kelimede <b>hiç yok</b>.</p>
         <hr>
+        <p><b>Örnek:</b> Gizli kelime <b>YAKIT</b> iken <b>TAKIM</b> tahmininde bulunursan:</p>
+        <div class="example">
+          <div class="tile present">T</div>
+          <div class="tile correct">A</div>
+          <div class="tile correct">K</div>
+          <div class="tile correct">I</div>
+          <div class="tile absent">M</div>
+        </div>
+        <p><b>A</b>, <b>K</b> ve <b>I</b> doğru yerde (yeşil). <b>T</b> kelimede var ama yanlış yerde (sarı). <b>M</b> kelimede yok (gri).</p>
+        <hr>
         <p>Her gün <b>Türkiye saati ile 00.00'de</b> yeni bir günlük kelime eklenir. Geçmiş günlerin oyunlarını <b>Arşiv</b> bölümünden oynayabilirsiniz.</p>
       </div>
       <label class="dontshow" id="howto-dont-row"><input type="checkbox" id="howto-dont"><span>Bir daha gösterme</span></label>
@@ -33,7 +43,7 @@
   <section id="archive" class="screen hidden">
     <header class="bar">
       <button class="icon-btn" data-show="game" aria-label="Geri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 5l-7 7 7 7"/></svg></button>
-      <span class="bar-title">Arşiv — Son 3 Ay</span>
+      <span class="bar-title">Arşiv</span>
       <span class="spacer"></span>
     </header>
     <div class="archive-list" id="archive-list"></div>
@@ -75,19 +85,22 @@
       <h2 id="modal-title">Tebrikler!</h2>
       <p id="modal-text" class="modal-text"></p>
 
-      <div class="stats-title">İSTATİSTİK</div>
-      <div class="stats-row">
-        <div class="stat"><div class="stat-num" id="st-played">0</div><div class="stat-lbl">Oynanan</div></div>
-        <div class="stat"><div class="stat-num" id="st-win">0</div><div class="stat-lbl">Galibiyet %</div></div>
-        <div class="stat"><div class="stat-num" id="st-streak">0</div><div class="stat-lbl">Seri Galibiyet</div></div>
-        <div class="stat"><div class="stat-num" id="st-max">0</div><div class="stat-lbl">Seri Rekoru</div></div>
+      <div class="result-grid" id="result-grid"></div>
+
+      <div id="general-stats">
+        <div class="stats-title">İSTATİSTİK</div>
+        <div class="stats-row">
+          <div class="stat"><div class="stat-num" id="st-played">0</div><div class="stat-lbl">Oynanan</div></div>
+          <div class="stat"><div class="stat-num" id="st-win">0</div><div class="stat-lbl">Galibiyet %</div></div>
+          <div class="stat"><div class="stat-num" id="st-streak">0</div><div class="stat-lbl">Seri Galibiyet</div></div>
+          <div class="stat"><div class="stat-num" id="st-max">0</div><div class="stat-lbl">Seri Rekoru</div></div>
+        </div>
+
+        <div class="stats-title">TAHMİN DAĞILIMI</div>
+        <div class="dist" id="dist"></div>
       </div>
 
-      <div class="stats-title">TAHMİN DAĞILIMI</div>
-      <div class="dist" id="dist"></div>
-
       <button class="menu-btn primary wide" id="share-btn">Paylaş</button>
-      <button class="menu-btn wide" id="modal-archive" data-go="archive">Arşive Git</button>
       <div id="copied-toast" class="copied-toast hidden">Panoya kopyalandı</div>
     </div>
   </div>
@@ -109,6 +122,13 @@
           </select>
           <span class="select-caret"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
         </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-txt">
+          <div class="setting-name">Zor mod</div>
+          <div class="setting-desc">Açığa çıkan ipuçları sonraki tahminlerde kullanılmalı.</div>
+        </div>
+        <button class="switch" id="hard-toggle" role="switch" aria-checked="false" aria-label="Zor mod"><span class="knob"></span></button>
       </div>
       <div class="setting-row">
         <div class="setting-txt">
