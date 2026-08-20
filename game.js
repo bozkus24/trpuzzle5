@@ -422,7 +422,9 @@ function buildArchive(){
     item.className="archive-item"+(isToday?" today":"");
     let statusHTML = "";
     if(st && st.done){
-      statusHTML = `<span class="pegs done">${st.win ? st.guesses.length : "X"}/6</span>`;
+      statusHTML = st.win
+        ? `<span class="pegs win">${st.guesses.length}/6</span>`
+        : `<span class="pegs lose">X/6</span>`;
     } else if(st && st.guesses && st.guesses.length>0){
       statusHTML = `<span class="pegs progress">Devam ediyor</span>`;
     }
