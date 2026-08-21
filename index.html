@@ -1,9 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
 <meta charset="utf-8">
+<meta name="description" content="Harfle — günlük Türkçe kelime tahmin oyunu. Gizli kelimeyi altı denemede bul!">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta name="theme-color" content="#121213">
 <title>Harfle — Türkçe Kelime Oyunu</title>
+<link rel="canonical" href="https://trpuzzle.com/harfle/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TrPuzzle">
+<meta property="og:title" content="Harfle — Türkçe Kelime Oyunu">
+<meta property="og:description" content="Gizli beş harfli Türkçe kelimeyi altı tahminde bul. Her gün yeni kelime, arşiv ve zor mod.">
+<meta property="og:url" content="https://trpuzzle.com/harfle/">
+<meta property="og:image" content="https://trpuzzle.com/harfle/logo.png">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%23538d4e'/><text y='74' x='50' font-size='68' text-anchor='middle' font-family='Arial' font-weight='bold' fill='white'>T</text></svg>">
 <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
 <div id="app">
 
@@ -150,3 +164,41 @@
 
 <script src="words.js"></script>
 <script src="game.js"></script>
+
+<section class="tp-bilgi" id="bilgi">
+  <h1>Harfle: günlük Türkçe kelime tahmin oyunu</h1>
+  <p>Harfle, dünyaca sevilen günlük kelime oyunu formatının Türkçe için sıfırdan hazırlanmış hâlidir. Amaç basit: <strong>beş harfli gizli kelimeyi en fazla altı tahminde</strong> bulmak. Kelime her gün Türkiye saatiyle 00.00'da yenilenir ve o gün herkes aynı kelimeyi çözer — sonucunu arkadaşlarınla kıyaslamak işin en keyifli kısmı.</p>
+  <h2>Nasıl oynanır?</h2>
+  <p>Beş harfli geçerli bir Türkçe kelime yaz ve onayla. Kutular renk değiştirerek ipucu verir: <strong>yeşil</strong> harf doğru ve doğru yerde, <strong>sarı</strong> harf kelimede var ama yanlış yerde, <strong>gri</strong> harf kelimede hiç yok. Bu ipuçlarını birleştirerek altı deneme içinde kelimeye ulaşmaya çalışırsın. Dilersen ayarlardan <strong>zor modu</strong> açabilirsin: bulduğun yeşil ve sarı harfleri sonraki tahminlerinde kullanmak zorunda kalırsın.</p>
+  <h2>Strateji ipuçları</h2>
+  <ul>
+    <li><strong>İlk tahmini akıllı seç:</strong> Türkçede en sık geçen harfleri (a, e, i, r, n, l, k) içeren, beş farklı harfli bir kelimeyle başla — tek hamlede çok bilgi toplarsın.</li>
+    <li><strong>Sarıları gezdir:</strong> Sarı yanan harfi sonraki tahminde mutlaka farklı bir konumda dene; iki sarı sonucu birleştirince doğru yer çoğu zaman kendiliğinden belli olur.</li>
+    <li><strong>Grileri unutma:</strong> Elenen harfleri yeni tahminlerde tekrar kullanmak deneme hakkı yakar; ekran klavyesindeki renkler sana hangi harflerin öldüğünü gösterir.</li>
+    <li><strong>Türkçe ekleri düşün:</strong> -lık, -mak, -cı gibi bitişler beş harfli kelimelerde sık görülür; son iki harfi tahmin ederken bunlardan faydalan.</li>
+  </ul>
+  <h2>Sık sorulan sorular</h2>
+  <p><strong>Yeni kelime ne zaman gelir?</strong> Her gece Türkiye saatiyle 00.00'da. Geçmiş günlerin kelimelerini Arşiv bölümünden dilediğin zaman oynayabilirsin.</p>
+  <p><strong>İstatistiklerim nerede saklanıyor?</strong> Yalnızca kendi tarayıcında. Harfle hesap istemez, hiçbir veriyi sunucuya göndermez.</p>
+  <p><strong>Ücretsiz mi?</strong> Tamamen. Üyelik ve ödeme yoktur; aç ve oyna.</p>
+</section>
+
+<footer class="tp-footer">
+  Bir <a href="https://trpuzzle.com/">TrPuzzle</a> oyunu — sekiz günlük Türkçe bulmacanın tamamını keşfet.<br>
+  <a href="https://trpuzzle.com/">Anasayfa</a> · <a href="https://trpuzzle.com/hakkinda.html">Hakkında</a> · <a href="https://trpuzzle.com/gizlilik.html">Gizlilik</a> · <a href="https://trpuzzle.com/kosullar.html">Koşullar</a>
+</footer>
+<style>
+/* ── TrPuzzle bilgi bölümü ve mini footer ── */
+.tp-bilgi{max-width:640px;margin:3rem auto 0;padding:1.75rem 1.4rem .5rem;border-top:1px solid rgba(128,128,128,.35);line-height:1.65;font-size:.95rem;text-align:left}
+.tp-bilgi h1{font-size:1.35rem;line-height:1.3;margin:0 0 .5em}
+.tp-bilgi h2{font-size:1.08rem;line-height:1.3;margin:1.5em 0 .5em}
+.tp-bilgi p{margin:.6em 0}
+.tp-bilgi ul{margin:.6em 0;padding-left:1.35rem}
+.tp-bilgi li{margin:.35em 0}
+.tp-bilgi details{margin:.5em 0}
+.tp-bilgi summary{cursor:pointer;font-weight:600}
+.tp-footer{max-width:640px;margin:0 auto;padding:1.25rem 1.4rem 2rem;font-size:.8rem;opacity:.72;text-align:center;line-height:1.7}
+.tp-footer a{color:inherit}
+</style>
+</body>
+</html>

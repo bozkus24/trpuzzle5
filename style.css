@@ -304,3 +304,8 @@ body{
   background:#fff; transition:left .2s;
 }
 .switch[aria-checked="true"] .knob{left:23px}
+
+/* Masaüstünde "Nasıl oynanır" penceresi biraz daha geniş (mobil aynı kalır) */
+@media (min-width: 760px) {
+  .howto-modal { max-width: 600px; }
+}
