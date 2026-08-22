@@ -69,7 +69,7 @@ body{
 .bar-sub{color:var(--muted); font-size:12px; margin-top:2px; white-space:nowrap}
 .spacer{width:40px}
 .bar-logo{height:36px; width:auto; display:block; flex:none}
-.bar-brand{display:flex; align-items:center; gap:8px; flex:none}
+.bar-brand{display:flex; align-items:center; gap:8px; flex:none; text-decoration:none; color:inherit; cursor:pointer}
 .bar-name{
   font-family:"Fredericka the Great", serif;
   font-weight:400; font-size:24px; letter-spacing:.5px;
