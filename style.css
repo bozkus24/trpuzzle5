@@ -22,13 +22,12 @@ body.light{
 /* renk körü modu (yüksek kontrast) — her iki temada da geçerli */
 body.cb{ --correct:#f5793a; --present:#85c0f9; --accent:#f5793a; }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{min-height:100%}
 body{
   background:var(--bg); color:var(--text);
   font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  overflow:hidden;
 }
-#app{height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
+#app{min-height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
 .screen{flex:1; display:flex; flex-direction:column; min-height:0}
 .hidden{display:none !important}
 
