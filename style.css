@@ -27,7 +27,7 @@ body{
   background:var(--bg); color:var(--text);
   font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
-#app{min-height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
+#app{min-height:100vh; min-height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
 .screen{flex:1; display:flex; flex-direction:column; min-height:0}
 .hidden{display:none !important}
 
@@ -138,10 +138,11 @@ body{
 }
 .row{display:flex; gap:4px}
 .tile{
+  width:min(74px, 18.5vw); height:min(74px, 18.5vw);
   width:min(74px, 18.5vw, 8dvh); height:min(74px, 18.5vw, 8dvh);
   border:2px solid var(--border);
   display:flex; align-items:center; justify-content:center;
-  font-size:min(34px, 9.5vw, 4.2dvh); font-weight:800; text-transform:uppercase; color:var(--text);
+  font-size:min(34px, 9.5vw); font-size:min(34px, 9.5vw, 4.2dvh); font-weight:800; text-transform:uppercase; color:var(--text);
   border-radius:0; user-select:none;
 }
 .tile.filled{border-color:var(--muted); animation:bump .1s ease}
@@ -155,7 +156,7 @@ body{
   0%{transform:rotateX(0)} 50%{transform:rotateX(90deg)} 100%{transform:rotateX(0)}
 }
 .row.shake{animation:shake .4s}
-@keyframes shake{0,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 .row.win .tile{animation:jump .5s ease}
 .row.win .tile:nth-child(2){animation-delay:.08s}
 .row.win .tile:nth-child(3){animation-delay:.16s}
@@ -167,7 +168,7 @@ body{
 .keyboard{padding:6px 4px 14px; display:flex; flex-direction:column; gap:8px}
 .krow{display:flex; justify-content:center; gap:6px}
 .key{
-  min-width:0; height:min(66px, 7.6dvh); border:none; border-radius:5px;
+  min-width:0; height:56px; height:min(66px, 7.6dvh); border:none; border-radius:5px;
   background:var(--key); color:var(--key-text); font-size:17px; font-weight:700;
   cursor:pointer; flex:1; padding:0; text-transform:uppercase;
 }
@@ -187,7 +188,7 @@ body{
 .modal{
   background:var(--panel); border:1px solid var(--border); border-radius:16px;
   padding:26px 22px; width:100%; max-width:360px; text-align:center; position:relative;
-  animation:pop .2s ease; max-height:88dvh; overflow-y:auto;
+  animation:pop .2s ease; max-height:88vh; max-height:88dvh; overflow-y:auto;
 }
 .howto-modal{max-width:380px}
 .howto-modal .sheet{padding:0; overflow:visible; text-align:left; line-height:1.55}
