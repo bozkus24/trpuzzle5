@@ -22,13 +22,12 @@ body.light{
 /* renk körü modu (yüksek kontrast) — her iki temada da geçerli */
 body.cb{ --correct:#f5793a; --present:#85c0f9; --accent:#f5793a; }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+html,body{min-height:100%}
 body{
   background:var(--bg); color:var(--text);
   font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  overflow:hidden;
 }
-#app{height:100vh; height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
+#app{min-height:100vh; min-height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
 .screen{flex:1; display:flex; flex-direction:column; min-height:0}
 .hidden{display:none !important}
 
@@ -69,7 +68,7 @@ body{
 .bar-sub{color:var(--muted); font-size:12px; margin-top:2px; white-space:nowrap}
 .spacer{width:40px}
 .bar-logo{height:36px; width:auto; display:block; flex:none}
-.bar-brand{display:flex; align-items:center; gap:8px; flex:none}
+.bar-brand{display:flex; align-items:center; gap:8px; flex:none; text-decoration:none; color:inherit; cursor:pointer}
 .bar-name{
   font-family:"Fredericka the Great", serif;
   font-weight:400; font-size:24px; letter-spacing:.5px;
