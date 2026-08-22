@@ -368,13 +368,14 @@ function buildShareText(){
   const g=modalG;
   const no=puzzleNo(g.date)+1;
   const tries=g.win?g.guesses.length:"X";
-  let out=`Harfle #${no} ${tries}/6\n${formatTR(g.date)}\n\n`;
+  let out=`Harfle #${no} ${tries}/6\n\n`;
   g.guesses.forEach(gs=>{
     scoreGuess(gs,g.word).forEach(s=>{
       out+= s==="correct"?"🟩":s==="present"?"🟨":"⬜";
     });
     out+="\n";
   });
+  out+="\nhttps://trpuzzle.com/harfle/";
   return out.trim();
 }
 
