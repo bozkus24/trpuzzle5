@@ -26,6 +26,7 @@ html,body{min-height:100%}
 body{
   background:var(--bg); color:var(--text);
   font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  touch-action:manipulation;   /* mobilde çift dokunma yakınlaştırmasını kapat */
 }
 #app{min-height:100vh; min-height:100dvh; max-width:520px; margin:0 auto; display:flex; flex-direction:column}
 .screen{flex:1; display:flex; flex-direction:column; min-height:0}
