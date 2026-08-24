@@ -102,8 +102,9 @@ function startGame(date){
 
   const isToday = dayDiff(d,new Date())===0;
   current.isToday = isToday;
-  document.getElementById("game-sub").textContent =
-    `${isToday?"Günün Oyunu":"Arşiv"} · ${formatTRShort(d)}`;
+  const sub = document.getElementById("game-sub");
+  sub.textContent = isToday ? "" : `Arşiv · ${formatTRShort(d)}`;
+  sub.style.display = isToday ? "none" : "";
 
   buildBoard();
   buildKeyboard();
