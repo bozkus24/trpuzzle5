@@ -102,8 +102,14 @@ function startGame(date){
 
   const isToday = dayDiff(d,new Date())===0;
   current.isToday = isToday;
-  document.getElementById("game-sub").textContent =
-    `${isToday?"Günün Oyunu":"Arşiv"} · ${formatTRShort(d)}`;
+  const sub = document.getElementById("game-sub");
+  if(isToday){
+    sub.textContent = "";
+    sub.style.display = "none";
+  } else {
+    sub.textContent = `Arşiv · ${formatTRShort(d)}`;
+    sub.style.display = "";
+  }
 
   buildBoard();
   buildKeyboard();
@@ -526,7 +532,7 @@ applyOsk();
 applyHard();
 startGame(new Date());
 // ilk açılışta "Nasıl Oynanır?" popup'ı (daha önce "bir daha gösterme" seçilmediyse)
-if(store.get("howtoSeen")!==1){
+if(store.get("howtoSeen")!==1 && (location.hash||"")!=="#arsiv"){
   document.getElementById("howto-dont-row").style.display="";   // açılışta kutucuk görünür
   document.getElementById("howto").classList.remove("hidden");
 }
