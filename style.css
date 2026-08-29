@@ -1,4 +1,4 @@
-/* Fredericka the Great (OFL) — gömülü */
+/* Fredericka the Great (OFL) - gömülü */
 @font-face{
   font-family:"Fredericka the Great";
   font-style:normal; font-weight:400; font-display:swap;
@@ -19,7 +19,7 @@ body.light{
   --correct:#6aaa64; --present:#c9b458; --absent:#787c7e;
   --accent:#6aaa64;
 }
-/* renk körü modu (yüksek kontrast) — her iki temada da geçerli */
+/* renk körü modu (yüksek kontrast) - her iki temada da geçerli */
 body.cb{ --correct:#f5793a; --present:#85c0f9; --accent:#f5793a; }
 *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent}
 html{touch-action:manipulation}

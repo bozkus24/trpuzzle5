@@ -1,4 +1,4 @@
-/* ================= TDK Wordle — Türkçe ================= */
+/* ================= TDK Wordle - Türkçe ================= */
 
 /* Türk alfabesi (büyük harf, sıralı) */
 const TR_ALPHABET = ["A","B","C","Ç","D","E","F","G","Ğ","H","I","İ","J","K","L","M",
@@ -30,7 +30,7 @@ const SVG = {
   moon:    _S('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>')
 };
 
-/* Oyunun başlangıç günü — 1. bulmaca bu gün. */
+/* Oyunun başlangıç günü - 1. bulmaca bu gün. */
 const EPOCH = new Date(2026, 7, 1);           // 1 Ağustos 2026
 const ARCHIVE_DAYS = 92;                       // ~3 ay (en erken 1 Ağustos 2026)
 
@@ -446,15 +446,31 @@ function buildArchive(){
   }
 }
 
-/* ---------- tema (aydınlık / karanlık) — ayarlardan ---------- */
+/* ---------- tema (aydınlık / karanlık) - ayarlardan ---------- */
 const isLight = () => document.body.classList.contains("light");
 function setTheme(light){
   document.body.classList.toggle("light", light);
   store.set("theme", light ? "light" : "dark");
   document.getElementById("theme-select").value = light ? "light" : "dark";
 }
-function applyTheme(){ setTheme(store.get("theme")==="light"); }
+function temaBoyaSadece(light){
+  document.body.classList.toggle("light", light);
+  const s=document.getElementById("theme-select"); if(s) s.value = light ? "light" : "dark";
+}
+function kayitliTema(){ const t=store.get("theme"); return (t==="light"||t==="dark") ? t : null; }
+/* Kayitli tercih varsa o, yoksa cihazin temasi (secim yapilmadan kaydedilmez) */
+function applyTheme(){
+  const t=kayitliTema();
+  if(t) { setTheme(t==="light"); return; }
+  temaBoyaSadece(!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches));
+}
 document.getElementById("theme-select").addEventListener("change", e=> setTheme(e.target.value==="light"));
+/* Kullanici elle secmediyse cihaz temasi degisince site de uyar */
+try{
+  const _mq=window.matchMedia("(prefers-color-scheme: dark)");
+  const _f=()=>{ if(!kayitliTema()) applyTheme(); };
+  _mq.addEventListener ? _mq.addEventListener("change",_f) : _mq.addListener(_f);
+}catch(e){}
 
 /* ---------- renk körü modu ---------- */
 function applyCb(){
