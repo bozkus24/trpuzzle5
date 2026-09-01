@@ -100,16 +100,7 @@ function startGame(date){
   current.row = current.guesses.length;
   current.input = "";
 
-  const isToday = dayDiff(d,new Date())===0;
-  current.isToday = isToday;
-  const sub = document.getElementById("game-sub");
-  if(isToday){
-    sub.textContent = "";
-    sub.style.display = "none";
-  } else {
-    sub.textContent = `Arşiv · ${formatTRShort(d)}`;
-    sub.style.display = "";
-  }
+  current.isToday = dayDiff(d,new Date())===0;
 
   buildBoard();
   buildKeyboard();
@@ -261,7 +252,7 @@ function feedback(win, tries, word){
   const M = {1:"Dahi olmalısın!", 2:"Büyüleyici!", 3:"Etkileyici!", 4:"Harika!", 5:"Güzel", 6:"Fena değil..."};
   const title = M[tries] || "Tebrikler!";
   const icon = tries===5 ? SVG.thumb : "";   // yalnızca "Güzel"de SVG
-  return {icon, cls:"good", title, text:`Kelimeyi ${tries} denemede buldun.`};
+  return {icon, cls:"good", title, text:""};
 }
 
 /* ---------- istatistik ---------- */
@@ -332,8 +323,10 @@ function showModal(g, general, share){
     const fb=feedback(g.win, g.guesses.length, g.word);
     title.textContent=fb.title; text.textContent=fb.text;
   } else {
-    title.textContent="İstatistik"; text.textContent="";
+    title.textContent="İstatistikler"; text.textContent="";
   }
+  /* Alt metin bossa (galibiyet) satir hic yer kaplamasin */
+  text.style.display = text.textContent ? "" : "none";
   const rg=document.getElementById("result-grid");
   if(done){ rg.innerHTML=buildResultGridHTML(); rg.style.display=""; }
   else { rg.innerHTML=""; rg.style.display="none"; }
@@ -343,6 +336,13 @@ function showModal(g, general, share){
   if(general) renderStats();
 
   document.getElementById("copied-toast").classList.add("hidden");
+  /* Sayac yalniz bugunun bitmis bulmacasinda anlamli */
+  const gs=document.getElementById("geri-sayim");
+  if(gs){
+    const goster = !!(done && g.isToday);
+    gs.style.display = goster ? "" : "none";
+    if(goster) geriSayimBaslat(); else geriSayimDurdur();
+  }
   document.getElementById("overlay").classList.remove("hidden");
 }
 
@@ -368,7 +368,26 @@ function buildResultGridHTML(){
   });
   return h+`</div>`;
 }
-function closeModal(){ document.getElementById("overlay").classList.add("hidden"); }
+function closeModal(){ document.getElementById("overlay").classList.add("hidden"); geriSayimDurdur(); }
+
+/* ---------- sonraki bulmacaya geri sayim ---------- */
+let geriSayimZ=null;
+function geriSayimYaz(){
+  const el=document.getElementById("geri-sayim-saat");
+  if(!el) return;
+  const n=new Date();
+  const yarin=new Date(n.getFullYear(), n.getMonth(), n.getDate()+1);  /* yerel gece yarisi */
+  let k=Math.max(0, Math.floor((yarin-n)/1000));
+  const s=String(k%60).padStart(2,"0"); k=Math.floor(k/60);
+  const d=String(k%60).padStart(2,"0"); const sa=String(Math.floor(k/60)).padStart(2,"0");
+  el.textContent=sa+":"+d+":"+s;
+}
+function geriSayimBaslat(){
+  geriSayimDurdur();
+  geriSayimYaz();
+  geriSayimZ=setInterval(geriSayimYaz, 1000);
+}
+function geriSayimDurdur(){ if(geriSayimZ){ clearInterval(geriSayimZ); geriSayimZ=null; } }
 
 function buildShareText(){
   const g=modalG;
@@ -425,8 +444,10 @@ function buildArchive(){
     const key=dateKey(d);
     const st=store.get(key);
     const isToday=i===0;
+    /* Vurgu, o an acik olan gune ait; arsiv yeniden acilinca secim korunur. */
+    const secili = !!(current && current.key===key);
     const item=document.createElement("div");
-    item.className="archive-item"+(isToday?" today":"");
+    item.className="archive-item"+(secili?" secili":"");
     let statusHTML = "";
     if(st && st.done){
       statusHTML = st.win
