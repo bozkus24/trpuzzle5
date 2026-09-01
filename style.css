@@ -8,16 +8,16 @@
 :root{
   --bg:#121213; --panel:#1a1a1b; --text:#ffffff; --muted:#818384;
   --border:#3a3a3c; --key:#5f6163; --key-text:#ffffff;
-  --correct:#538d4e; --present:#eab308; --absent:#3a3a3c;
-  --accent:#538d4e;
+  --correct:#3D8F46; --present:#F0C105; --absent:#3a3a3c;
+  --accent:#3D8F46;
   --radius:10px;
 }
 /* aydınlık tema */
 body.light{
   --bg:#ffffff; --panel:#ffffff; --text:#1a1a1b; --muted:#787c7e;
   --border:#d3d6da; --key:#d3d6da; --key-text:#1a1a1b;
-  --correct:#6aaa64; --present:#c9b458; --absent:#787c7e;
-  --accent:#6aaa64;
+  --correct:#3D8F46; --present:#F0C105; --absent:#787c7e;
+  --accent:#3D8F46;
 }
 /* renk körü modu (yüksek kontrast) - her iki temada da geçerli */
 body.cb{ --correct:#f5793a; --present:#85c0f9; --accent:#f5793a; }
@@ -48,7 +48,7 @@ body{
 
 .menu-btn{
   background:var(--panel); color:var(--text); border:2px solid var(--border);
-  border-radius:var(--radius); padding:15px 18px; font-size:16px; font-weight:700;
+  border-radius:6px; padding:15px 18px; font-size:16px; font-weight:700;
   cursor:pointer; transition:transform .05s, background .15s, border-color .15s;
   display:flex; align-items:center; justify-content:center; gap:9px;
 }
@@ -76,10 +76,6 @@ body{
   text-transform:uppercase; color:var(--text);
 }
 .bar-actions{display:flex; align-items:center; gap:0; flex:none}
-.puzzle-info{
-  text-align:center; color:var(--muted); font-size:13px; font-weight:600;
-  padding:0 12px; letter-spacing:.2px;
-}
 .icon-btn{
   background:none; border:none; color:var(--text);
   width:36px; height:40px; border-radius:8px; cursor:pointer;
@@ -106,7 +102,7 @@ body{
 .archive-item:active{transform:scale(.99)}
 .archive-item .a-date{font-weight:700; font-size:15px}
 .archive-item .a-num{color:var(--muted); font-size:12px; margin-top:2px}
-.archive-item.today{border-color:var(--correct)}
+.archive-item.secili{border-color:var(--correct); box-shadow:inset 0 0 0 1px var(--correct)}
 .a-status{min-width:64px; display:flex; justify-content:flex-end}
 .a-status .pegs{display:inline-flex; align-items:center; font-size:14px; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums}
 .a-status .pegs.win{color:var(--correct)}
@@ -187,7 +183,7 @@ body{
   display:flex; align-items:center; justify-content:center; padding:20px; z-index:50;
 }
 .modal{
-  background:var(--panel); border:1px solid var(--border); border-radius:16px;
+  background:var(--panel); border:1px solid var(--border); border-radius:10px;
   padding:26px 22px; width:100%; max-width:360px; text-align:center; position:relative;
   animation:pop .2s ease; max-height:88vh; max-height:88dvh; overflow-y:auto;
 }
@@ -242,10 +238,16 @@ body{
   text-align:left; font-size:12px; font-weight:800; letter-spacing:1.2px;
   color:var(--muted); margin:16px 0 8px;
 }
+.stats-title.orta{text-align:center}
 .stats-row{display:flex; justify-content:space-between; gap:6px}
-.stat{flex:1; text-align:center}
-.stat-num{font-size:30px; font-weight:800; color:var(--correct); font-variant-numeric:tabular-nums}
-.stat-lbl{font-size:11px; color:var(--muted); margin-top:2px; line-height:1.15}
+/* Her istatistik kendi kutucugunda; koseler hafif yuvarlak. */
+.stat{
+  flex:1; min-width:0; text-align:center;
+  background:var(--bg); border:1px solid var(--border); border-radius:6px;
+  padding:9px 3px 8px;
+}
+.stat-num{font-size:26px; font-weight:800; color:var(--correct); font-variant-numeric:tabular-nums; line-height:1.1}
+.stat-lbl{font-size:11px; color:var(--muted); margin-top:3px; line-height:1.2}
 .dist{display:flex; flex-direction:column; gap:5px}
 .dist-row{display:flex; align-items:center; gap:8px; font-size:13px}
 .dist-idx{width:12px; color:var(--text); font-weight:700; text-align:center}
@@ -310,3 +312,20 @@ body{
 @media (min-width: 760px) {
   .howto-modal { max-width: 600px; }
 }
+
+/* Sonuc ekraninin en alti: sonraki bulmacaya geri sayim */
+/* Etiket solda, geri sayim sagda; tek satir. */
+.geri-sayim {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: .82rem;
+  letter-spacing: .4px;
+  opacity: .75;
+}
+.geri-sayim span { text-transform: uppercase; font-weight: 700; font-size: .68rem; text-align: left; }
+.geri-sayim b { font-size: 1.15rem; font-weight: 800; font-variant-numeric: tabular-nums; }
