@@ -148,7 +148,7 @@ body{
 .tile.present{background:var(--present); border-color:var(--present)}
 .tile.absent{background:var(--absent); border-color:var(--absent)}
 .tile.correct,.tile.present,.tile.absent{color:#fff}
-.tile.reveal{animation:flip .5s ease forwards}
+.tile.reveal{animation:flip .7s ease forwards}
 @keyframes flip{
   0%{transform:rotateX(0)} 50%{transform:rotateX(90deg)} 100%{transform:rotateX(0)}
 }

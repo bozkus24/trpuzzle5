@@ -77,7 +77,7 @@ document.addEventListener("click", e=>{
   const t = e.target.closest("[data-go]");
   if(!t) return;
   const dest = t.getAttribute("data-go");
-  if(dest==="game"){ startGame(new Date()); }
+  if(dest==="game"){ startGame(TrPuzzleClock.calendar()); }
   else { closeModal(); show(dest); }
 });
 
@@ -92,7 +92,7 @@ function loadState(key, word){
 
 function startGame(date){
   const d = startOfDay(date);
-  if(dayDiff(d, new Date())>0){ return; } // gelecek kilitli
+  if(dayDiff(d, TrPuzzleClock.calendar())>0){ return; } // gelecek kilitli
   const key = dateKey(d);
   const word = wordForDate(d);
   current = Object.assign({date:d, key}, loadState(key, word));
@@ -100,7 +100,7 @@ function startGame(date){
   current.row = current.guesses.length;
   current.input = "";
 
-  current.isToday = dayDiff(d,new Date())===0;
+  current.isToday = dayDiff(d,TrPuzzleClock.calendar())===0;
 
   buildBoard();
   buildKeyboard();
@@ -221,8 +221,8 @@ function submitGuess(){
   [...guess].forEach((ch,c)=>{
     const t=tile(r,c);
     setTimeout(()=>{ t.classList.add("reveal");
-      setTimeout(()=>{ t.classList.add("filled",res[c]); paintKey(ch,res[c]); },250);
-    }, c*160);
+      setTimeout(()=>{ t.classList.add("filled",res[c]); paintKey(ch,res[c]); },350);
+    }, c*340);
   });
 
   current.guesses.push(guess);
@@ -236,8 +236,8 @@ function submitGuess(){
 
   if(over){
     if(current.isToday) updateStats(win, current.guesses.length);   // arşiv oyunları istatistiğe işlemez
-    const delay = COLS*160 + 500 + (win?600:0);
-    if(win){ setTimeout(()=>document.querySelector(`.row[data-r="${r}"]`).classList.add("win"), COLS*160+300); }
+    const delay = COLS*340 + 500 + (win?600:0);
+    if(win){ setTimeout(()=>document.querySelector(`.row[data-r="${r}"]`).classList.add("win"), COLS*340+300); }
     // önce küçük popup, sonra sonuç/istatistik ekranı
     setTimeout(()=>{
       showMini();
@@ -310,7 +310,7 @@ function stateForDate(d){
   const key=dateKey(d);
   const word=wordForDate(d);
   const st=loadState(key, word);
-  return {date:d, key, word, guesses:st.guesses, done:st.done, win:st.win, isToday:dayDiff(d,new Date())===0};
+  return {date:d, key, word, guesses:st.guesses, done:st.done, win:st.win, isToday:dayDiff(d,TrPuzzleClock.calendar())===0};
 }
 
 // tek render: g = gösterilecek oyun; general = genel istatistik göster; share = paylaş göster
@@ -353,7 +353,7 @@ function openResult(){
 }
 // İstatistik butonu: HER ZAMAN bugünün günlük istatistik ekranı (arşivden bağımsız)
 function openStats(){
-  showModal(stateForDate(new Date()), true, true);
+  showModal(stateForDate(TrPuzzleClock.calendar()), true, true);
 }
 
 function buildResultGridHTML(){
@@ -376,7 +376,7 @@ function geriSayimYaz(){
   const el=document.getElementById("geri-sayim-saat");
   if(!el) return;
   const n=new Date();
-  const yarin=new Date(n.getFullYear(), n.getMonth(), n.getDate()+1);  /* yerel gece yarisi */
+  const yarin=new Date(n.getTime()+TrPuzzleClock.remaining(n));
   let k=Math.max(0, Math.floor((yarin-n)/1000));
   const s=String(k%60).padStart(2,"0"); k=Math.floor(k/60);
   const d=String(k%60).padStart(2,"0"); const sa=String(Math.floor(k/60)).padStart(2,"0");
@@ -437,7 +437,7 @@ function shake(){
 /* ================= ARŞİV ================= */
 function buildArchive(){
   const list=document.getElementById("archive-list"); list.innerHTML="";
-  const today=startOfDay(new Date());
+  const today=startOfDay(TrPuzzleClock.calendar());
   for(let i=0;i<ARCHIVE_DAYS;i++){
     const d=new Date(today); d.setDate(d.getDate()-i);
     if(dayDiff(d,EPOCH)<0) break;              // başlangıçtan önce yok
@@ -567,7 +567,7 @@ applyTheme();
 applyCb();
 applyOsk();
 applyHard();
-startGame(new Date());
+startGame(TrPuzzleClock.calendar());
 // ilk açılışta "Nasıl Oynanır?" popup'ı (daha önce "bir daha gösterme" seçilmediyse)
 if(store.get("howtoSeen")!==1 && (location.hash||"")!=="#arsiv"){
   document.getElementById("howto-dont-row").style.display="";   // açılışta kutucuk görünür
