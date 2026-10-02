@@ -329,3 +329,6 @@ body{
 }
 .geri-sayim span { text-transform: uppercase; font-weight: 700; font-size: .68rem; text-align: left; }
 .geri-sayim b { font-size: 1.15rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+
+/* Arşiv, açık günlük sonucun önünde kalır. */
+body.archive-open #overlay { visibility:hidden; pointer-events:none; }

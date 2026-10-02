@@ -54,8 +54,7 @@ function seededPerm(arr, seed){
   for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
   return a;
 }
-const PERM = seededPerm(ANSWERS, 20260101);
-const wordForDate = d => up(PERM[((puzzleNo(d) % PERM.length)+PERM.length) % PERM.length]);
+// Daily answers and their permutation now live only in the server catalog.
 
 /* ---------- durum (localStorage) ---------- */
 const store = {
@@ -67,6 +66,7 @@ const store = {
 const screens = ["archive","game"];
 function show(id){
   screens.forEach(s=>document.getElementById(s).classList.toggle("hidden", s!==id));
+  document.body.classList.toggle("archive-open", id==="archive");
   if(id==="archive") buildArchive();
 }
 document.addEventListener("click", e=>{
@@ -78,36 +78,37 @@ document.addEventListener("click", e=>{
   if(!t) return;
   const dest = t.getAttribute("data-go");
   if(dest==="game"){ startGame(TrPuzzleClock.calendar()); }
-  else { closeModal(); show(dest); }
+  else { if(dest!=="archive") closeModal(); show(dest); }
 });
 
 /* ================= OYUN ================= */
 let current = null; // {date, key, word, guesses:[], done, win}
 
-function loadState(key, word){
-  let st = store.get(key);
-  if(!st || st.word!==word){ st = {word, guesses:[], done:false, win:false}; }
-  return st;
+function loadState(key){
+  const st=store.get(key);
+  if(!st || !Array.isArray(st.guesses) || st.guesses.length>6 || !st.guesses.every(w=>typeof w==="string"&&/^[A-ZÇĞİÖŞÜ]{5}$/.test(w))) return {guesses:[],scores:[],done:false,win:false,word:null};
+  return {...st,word:st.done&&typeof st.word==='string'?st.word:null};
 }
-
-function startGame(date){
-  const d = startOfDay(date);
-  if(dayDiff(d, TrPuzzleClock.calendar())>0){ return; } // gelecek kilitli
-  const key = dateKey(d);
-  const word = wordForDate(d);
-  current = Object.assign({date:d, key}, loadState(key, word));
-  current.word = word;
-  current.row = current.guesses.length;
-  current.input = "";
-
-  current.isToday = dayDiff(d,TrPuzzleClock.calendar())===0;
-
-  buildBoard();
-  buildKeyboard();
-  renderFromState();
-  show("game");
-  msg("");
-  if(current.done){ setTimeout(()=>openResult(), 350); }
+let remoteSession=null, gameRequest=0, remotePending=false;
+function saveCurrent(){store.set(current.key,{word:current.done?current.word:null,guesses:current.guesses,scores:current.scores,done:current.done,win:current.win,token:remoteSession.token});}
+async function startGame(date){
+  const d=startOfDay(date);
+  if(dayDiff(d,TrPuzzleClock.calendar())>0)return;
+  const request=++gameRequest,key=dateKey(d),saved=loadState(key);
+  remotePending=true;msg('Oyun yükleniyor…');
+  try{
+    const options={date:key,mode:dayDiff(d,TrPuzzleClock.calendar())===0?'daily':'archive'};
+    if(saved.token)options.token=saved.token;
+    else if(saved.guesses.length)options.legacyMoves=saved.guesses;
+    const session=await TrPuzzleRemote.open('harfle',options);
+    if(request!==gameRequest)return;
+    remoteSession=session;
+    const v=session.view;
+    current={date:d,key,word:v.answer||null,guesses:v.guesses,scores:v.scores,done:v.done,win:v.win,row:v.guesses.length,input:'',isToday:dayDiff(d,TrPuzzleClock.calendar())===0};
+    saveCurrent();buildBoard();buildKeyboard();renderFromState();show('game');msg('');
+    const opened=current;if(current.done)setTimeout(()=>{if(current===opened)openResult();},350);
+  }catch(e){if(request===gameRequest)msg(e.message);}
+  finally{if(request===gameRequest)remotePending=false;}
 }
 
 function buildBoard(){
@@ -156,7 +157,7 @@ function scoreGuess(guess, answer){
 function renderFromState(){
   // önceki tahminleri boya
   current.guesses.forEach((guess,r)=>{
-    const res=scoreGuess(guess,current.word);
+    const res=current.scores[r];
     [...guess].forEach((ch,c)=>{
       const t=tile(r,c); t.textContent=ch; t.classList.add("filled",res[c]);
       paintKey(ch,res[c]);
@@ -180,7 +181,7 @@ function paintKey(ch,state){
 
 /* ---------- giriş ---------- */
 function handleKey(k){
-  if(!current || current.done) return;
+  if(!current || current.done || remotePending) return;
   if(k==="ENTER"){ submitGuess(); return; }
   if(k==="SIL"){ if(current.input.length>0){ current.input=current.input.slice(0,-1); drawInput(); } return; }
   if(current.input.length>=COLS) return;
@@ -208,15 +209,24 @@ document.addEventListener("keydown",e=>{
   }
 });
 
-function submitGuess(){
+async function submitGuess(){
+  if(remotePending||!current||current.done)return;
   if(current.input.length<COLS){ shake(); msg("Yeterli harf yok"); return; }
   const guess=current.input;
   const lower=guess.toLocaleLowerCase("tr-TR");
   if(!ACCEPTED.has(lower)){ shake(); msg("Kelime listede yok"); return; }
   if(hardMode()){ const err=hardModeError(guess); if(err){ shake(); msg(err); return; } }
 
+  msg("");
   const r=current.row;
-  const res=scoreGuess(guess,current.word);
+  const opened=current,session=remoteSession;
+  remotePending=true;
+  let view;
+  try{view=await TrPuzzleRemote.move(session,guess);}catch(e){msg(e.message);remotePending=false;return;}
+  if(current!==opened){remotePending=false;return;}
+  const res=view.scores[r];
+  current.word=view.answer||null;
+  current.scores=view.scores;
   // flip animasyonu
   [...guess].forEach((ch,c)=>{
     const t=tile(r,c);
@@ -232,7 +242,8 @@ function submitGuess(){
   const win = res.every(x=>x==="correct");
   const over = win || current.row>=ROWS;
   if(over){ current.done=true; current.win=win; }
-  store.set(current.key, {word:current.word, guesses:current.guesses, done:current.done, win:current.win});
+  saveCurrent();
+  remotePending=false;
 
   if(over){
     if(current.isToday) updateStats(win, current.guesses.length);   // arşiv oyunları istatistiğe işlemez
@@ -257,7 +268,7 @@ function feedback(win, tries, word){
 
 /* ---------- istatistik ---------- */
 function getStats(){
-  return store.get("stats") || {played:0, wins:0, streak:0, max:0, dist:{1:0,2:0,3:0,4:0,5:0,6:0}};
+  return TrPuzzleSecurity.stats(store.get("stats"), ["played","wins","streak","max"], [1,2,3,4,5,6]);
 }
 function updateStats(win, tries){
   const s=getStats();
@@ -308,9 +319,8 @@ let modalG = null;   // modalın hangi oyunu gösterdiği (current veya bugün)
 function stateForDate(d){
   d=startOfDay(d);
   const key=dateKey(d);
-  const word=wordForDate(d);
-  const st=loadState(key, word);
-  return {date:d, key, word, guesses:st.guesses, done:st.done, win:st.win, isToday:dayDiff(d,TrPuzzleClock.calendar())===0};
+  const st=loadState(key);
+  return {...st,date:d,key,isToday:dayDiff(d,TrPuzzleClock.calendar())===0};
 }
 
 // tek render: g = gösterilecek oyun; general = genel istatistik göster; share = paylaş göster
@@ -426,7 +436,7 @@ document.getElementById("stats-btn").addEventListener("click", openStats);
 let msgTimer=null;
 function msg(text){
   const m=document.getElementById("message");
-  m.innerHTML = text? `<span class="toast">${text}</span>`:"";
+  m.innerHTML = text? `<span class="toast">${TrPuzzleSecurity.escape(text)}</span>`:"";
   if(text){ clearTimeout(msgTimer); msgTimer=setTimeout(()=>m.innerHTML="",1400); }
 }
 function shake(){
@@ -442,7 +452,7 @@ function buildArchive(){
     const d=new Date(today); d.setDate(d.getDate()-i);
     if(dayDiff(d,EPOCH)<0) break;              // başlangıçtan önce yok
     const key=dateKey(d);
-    const st=store.get(key);
+    const st=loadState(key);
     const isToday=i===0;
     /* Vurgu, o an acik olan gune ait; arsiv yeniden acilinca secim korunur. */
     const secili = !!(current && current.key===key);
@@ -462,7 +472,7 @@ function buildArchive(){
         <div class="a-num">Bulmaca #${puzzleNo(d)+1}</div>
       </div>
       <div class="a-status">${statusHTML}</div>`;
-    item.addEventListener("click",()=>startGame(d));
+    item.addEventListener("click",()=>{ closeModal(); startGame(d); if(!current.done && store.get("howtoSeen")!==1){ document.getElementById("howto-dont-row").style.display=""; document.getElementById("howto").classList.remove("hidden"); } });
     list.appendChild(item);
   }
 }
@@ -526,8 +536,8 @@ document.getElementById("hard-toggle").addEventListener("click", ()=>{
 // açığa çıkan ipuçları sonraki tahminde kullanılmalı; ihlal varsa hata mesajı döndürür
 function hardModeError(guess){
   const g=[...guess], ans=current.word;
-  for(const prev of current.guesses){
-    const res=scoreGuess(prev, ans), pg=[...prev];
+  for(const [i,prev] of current.guesses.entries()){
+    const res=current.scores[i], pg=[...prev];
     for(let i=0;i<COLS;i++){
       if(res[i]==="correct" && g[i]!==pg[i]) return `${i+1}. harf ${pg[i]} olmalı`;
     }
