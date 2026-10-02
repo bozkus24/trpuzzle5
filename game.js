@@ -32,7 +32,7 @@ const SVG = {
 
 /* Oyunun başlangıç günü - 1. bulmaca bu gün. */
 const EPOCH = new Date(2026, 7, 1);           // 1 Ağustos 2026
-const ARCHIVE_DAYS = 92;                       // ~3 ay (en erken 1 Ağustos 2026)
+const ARCHIVE_START = new Date(2026, 9, 1); // 1 Ekim 2026
 
 const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
                    "Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
@@ -448,9 +448,9 @@ function shake(){
 function buildArchive(){
   const list=document.getElementById("archive-list"); list.innerHTML="";
   const today=startOfDay(TrPuzzleClock.calendar());
-  for(let i=0;i<ARCHIVE_DAYS;i++){
+  for(let i=0;i<=dayDiff(today,ARCHIVE_START);i++){
     const d=new Date(today); d.setDate(d.getDate()-i);
-    if(dayDiff(d,EPOCH)<0) break;              // başlangıçtan önce yok
+    if(dateKey(d)<"2026-10-01") break;              // başlangıçtan önce yok
     const key=dateKey(d);
     const st=loadState(key);
     const isToday=i===0;
