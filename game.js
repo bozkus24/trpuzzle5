@@ -12,6 +12,8 @@ const KB_ROWS = [
 ];
 
 const ROWS = 6, COLS = 5;
+// style.css içindeki flip süresiyle aynı; ilk renk 90 ms içinde açılır.
+const REVEAL_MS = 180, REVEAL_STEP_MS = 90;
 
 /* SVG ikonlar (emoji yerine) */
 const _S = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
@@ -227,12 +229,25 @@ async function submitGuess(){
   const res=view.scores[r];
   current.word=view.answer||null;
   current.scores=view.scores;
-  // flip animasyonu
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealMs = reducedMotion ? 0 : REVEAL_MS;
+  const revealStep = reducedMotion ? 0 : REVEAL_STEP_MS;
+  const revealTotal = (COLS-1)*revealStep + revealMs;
+  // İlk kutuyu hemen döndür; rengi kısa dönüşün ortasında göster.
   [...guess].forEach((ch,c)=>{
     const t=tile(r,c);
-    setTimeout(()=>{ t.classList.add("reveal");
-      setTimeout(()=>{ t.classList.add("filled",res[c]); paintKey(ch,res[c]); },350);
-    }, c*340);
+    const paint=()=>{
+      if(current!==opened)return;
+      t.classList.add("filled",res[c]); paintKey(ch,res[c]);
+    };
+    const reveal=()=>{
+      if(current!==opened)return;
+      if(!revealMs){paint();return;}
+      t.classList.add("reveal");
+      setTimeout(paint,revealMs/2);
+    };
+    if(c && revealStep)setTimeout(reveal,c*revealStep);
+    else reveal();
   });
 
   current.guesses.push(guess);
@@ -247,12 +262,15 @@ async function submitGuess(){
 
   if(over){
     if(current.isToday) updateStats(win, current.guesses.length);   // arşiv oyunları istatistiğe işlemez
-    const delay = COLS*340 + 500 + (win?600:0);
-    if(win){ setTimeout(()=>document.querySelector(`.row[data-r="${r}"]`).classList.add("win"), COLS*340+300); }
+    const delay = revealTotal + (win && !reducedMotion ? 900 : 200);
+    if(win && !reducedMotion){ setTimeout(()=>{
+      if(current===opened)document.querySelector(`.row[data-r="${r}"]`).classList.add("win");
+    }, revealTotal); }
     // önce küçük popup, sonra sonuç/istatistik ekranı
     setTimeout(()=>{
+      if(current!==opened)return;
       showMini();
-      setTimeout(()=>{ hideMini(); openResult(); }, 1500);
+      setTimeout(()=>{ if(current===opened){hideMini();openResult();} }, 1500);
     }, delay);
   }
 }
