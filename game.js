@@ -31,7 +31,7 @@ const SVG = {
 };
 
 /* Oyunun başlangıç günü - 1. bulmaca bu gün. */
-const EPOCH = new Date(2026, 7, 1);           // 1 Ağustos 2026
+const EPOCH = new Date(2026, 9, 1);           // 1 Ağustos 2026
 const ARCHIVE_START = new Date(2026, 9, 1); // 1 Ekim 2026
 
 const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran",
