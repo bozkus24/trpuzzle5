@@ -148,9 +148,9 @@ body{
 .tile.present{background:var(--present); border-color:var(--present)}
 .tile.absent{background:var(--absent); border-color:var(--absent)}
 .tile.correct,.tile.present,.tile.absent{color:#fff}
-.tile.reveal{animation:flip .18s ease forwards}
+.tile.reveal{animation:flip .32s ease forwards}
 @keyframes flip{
-  0%{transform:rotateX(0)} 50%{transform:rotateX(90deg)} 100%{transform:rotateX(0)}
+  0%{transform:rotateX(0)} 20%{transform:rotateX(90deg)} 100%{transform:rotateX(0)}
 }
 .row.shake{animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
