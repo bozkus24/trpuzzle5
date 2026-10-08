@@ -12,8 +12,8 @@ const KB_ROWS = [
 ];
 
 const ROWS = 6, COLS = 5;
-// style.css içindeki flip süresiyle aynı; ilk renk 90 ms içinde açılır.
-const REVEAL_MS = 180, REVEAL_STEP_MS = 90;
+// İlk renk erken görünür; kalan harfler eşit ve okunabilir aralıklarla açılır.
+const REVEAL_MS = 320, REVEAL_STEP_MS = 220;
 
 /* SVG ikonlar (emoji yerine) */
 const _S = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
@@ -191,6 +191,8 @@ function handleKey(k){
   current.input+=k; drawInput();
 }
 function drawInput(){
+  const guess=current.input;
+  TrPuzzleRemote.prepare(remoteSession,guess.length===COLS&&ACCEPTED.has(guess.toLocaleLowerCase('tr-TR'))&&(!hardMode()||!hardModeError(guess))?guess:null);
   const r=current.row;
   for(let c=0;c<COLS;c++){
     const t=tile(r,c); const ch=current.input[c]||"";
@@ -224,8 +226,8 @@ async function submitGuess(){
   const opened=current,session=remoteSession;
   remotePending=true;
   let view;
-  try{view=await TrPuzzleRemote.move(session,guess);}catch(e){msg(e.message);remotePending=false;return;}
-  if(current!==opened){remotePending=false;return;}
+  try{view=await TrPuzzleRemote.move(session,guess,document.querySelector(`.row[data-r="${r}"]`));}catch(e){if(current===opened){msg(e.message);remotePending=false;}return;}
+  if(current!==opened)return;
   const res=view.scores[r];
   current.word=view.answer||null;
   current.scores=view.scores;
@@ -233,7 +235,7 @@ async function submitGuess(){
   const revealMs = reducedMotion ? 0 : REVEAL_MS;
   const revealStep = reducedMotion ? 0 : REVEAL_STEP_MS;
   const revealTotal = (COLS-1)*revealStep + revealMs;
-  // İlk kutuyu hemen döndür; rengi kısa dönüşün ortasında göster.
+  // Dönüşün ilk yüzde yirmisinde renk gelir; açılma yumuşakça tamamlanır.
   [...guess].forEach((ch,c)=>{
     const t=tile(r,c);
     const paint=()=>{
@@ -244,7 +246,7 @@ async function submitGuess(){
       if(current!==opened)return;
       if(!revealMs){paint();return;}
       t.classList.add("reveal");
-      setTimeout(paint,revealMs/2);
+      setTimeout(paint,revealMs*.2);
     };
     if(c && revealStep)setTimeout(reveal,c*revealStep);
     else reveal();
@@ -258,7 +260,7 @@ async function submitGuess(){
   const over = win || current.row>=ROWS;
   if(over){ current.done=true; current.win=win; }
   saveCurrent();
-  remotePending=false;
+  setTimeout(()=>{if(current===opened)remotePending=false;},revealTotal);
 
   if(over){
     if(current.isToday) updateStats(win, current.guesses.length);   // arşiv oyunları istatistiğe işlemez
